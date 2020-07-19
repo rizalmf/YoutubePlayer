@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="box" spacing="35.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.youtubeplayer.controller.child.menu.HomeController">
+   <children>
+      <VBox fx:id="recomendBox" spacing="10.0" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox>
+               <children>
+                  <HBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Recommended Videos">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="10.0">
+                     <children>
+                        <JFXButton id="bUpload" fx:id="bExpand" ripplerFill="WHITE" style="-fx-background-radius: 5px;" text="Expand">
+                           <font>
+                              <Font name="System Bold" size="9.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <ScrollPane id="scroll" fx:id="spRecomend" pannable="true" prefHeight="190.0" prefWidth="716.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+      <HBox fx:id="bottomBox" minHeight="257.0" spacing="10.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox fx:id="channelBox" spacing="20.0">
+               <children>
+                  <Label text="Popular Channels">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <ScrollPane id="scroll" fx:id="spPopular" hbarPolicy="NEVER" pannable="true" prefHeight="186.0" prefWidth="350.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets left="-30.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></ScrollPane>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="mixesBox" spacing="20.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Youtube Mixes">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <ScrollPane id="scroll" fx:id="spMixes" pannable="true" prefHeight="186.0" prefWidth="350.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

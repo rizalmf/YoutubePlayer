@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="box" spacing="35.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.youtubeplayer.controller.child.menu.LiveController">
+   <children>
+      <VBox fx:id="boxChild" spacing="10.0" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox>
+               <children>
+                  <HBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Live">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="RED" glyphName="CIRCLE" size="10" />
+                           </graphic>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <ScrollPane id="scroll" fx:id="spLive" fitToWidth="true" pannable="true" prefHeight="190.0" prefWidth="716.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </children>
+</VBox>

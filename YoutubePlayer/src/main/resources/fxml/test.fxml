@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="mainPane" prefHeight="523.0" prefWidth="775.0" styleClass="mainFxmlClass" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane layoutX="86.0" layoutY="82.0" prefWidth="175.0" style="-fx-background-color: white; -fx-background-radius: 6px;">
+         <children>
+            <ImageView fitHeight="90.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" />
+            <HBox>
+               <children>
+                  <VBox HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
+                     </padding>
+                     <children>
+                        <HBox VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label id="ad" style="-fx-text-fill: black;" text="dasd asd as asd " wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="10.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <FontAwesomeIconView glyphName="PLAY" />
+                     </children>
+                  </VBox>
+                  <HBox minWidth="65.0" style="-fx-background-color: #00000055; -fx-alignment: CENTER;">
+                     <children>
+                        <Label text="+50">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </StackPane>
+      <JFXButton layoutX="135.0" layoutY="329.0" />
+   </children>
+</AnchorPane>
