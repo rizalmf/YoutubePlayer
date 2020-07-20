@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 rizal.
+ * Copyright 2020 Java Programmer Indonesia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,15 @@ import com.youtubeplayer.util.Duration;
 public class ServiceTemp implements Service{
 
     private final Duration duration;
+    private static ServiceTemp service;
     
-    public ServiceTemp(){
+    public static ServiceTemp getInstance(){
+        if (service == null) {
+            service = new ServiceTemp();
+        }
+        return service;
+    }
+    private ServiceTemp(){
         System.out.println("initiating temporary service");
         duration = new Duration();
     }
@@ -66,7 +73,7 @@ public class ServiceTemp implements Service{
     }
     
     @Override
-    public Response popularChannel() {
+    public Response subscriptionChannel() {
         List<Channel> list = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             list.add(new Channel(

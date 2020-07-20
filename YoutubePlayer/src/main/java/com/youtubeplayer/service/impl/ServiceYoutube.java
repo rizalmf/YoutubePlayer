@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 rizal.
+ * Copyright 2020 Java Programmer Indonesia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,13 +42,22 @@ public class ServiceYoutube implements Service{
 
     private final long NUMBER_OF_VIDEOS_RETURNED = 54;
     private final YouTube youtube;
-    private YouTube.Search.List searchs;
+    private YouTube.Search.List search;
     private YouTube.Videos.List videos;
     private YouTube.Subscriptions.List channels;
     private YouTube.LiveStreams.List liveStreams;
     private YouTube.Playlists.List playlists;
+    private static ServiceYoutube service;
     
-    public ServiceYoutube() throws Exception{
+    public static ServiceYoutube getInstance() throws Exception{
+        if(service == null){
+            System.out.println("initiating youtube service");
+            service = new ServiceYoutube();
+        }
+        return service;
+    }
+    
+    private ServiceYoutube() throws Exception{
         System.out.println("initiating youtube service");
         duration = new Duration();
         viewer = new Viewer();
@@ -57,53 +66,7 @@ public class ServiceYoutube implements Service{
         initKey();
         makeFields();
     }
-    
-    private void initKey(){
-        searchs.setKey(YoutubeUtil.getKey());
-        videos.setKey(YoutubeUtil.getKey());
-        channels.setKey(YoutubeUtil.getKey());
-        liveStreams.setKey(YoutubeUtil.getKey());
-        playlists.setKey(YoutubeUtil.getKey());
-    }
-    
-    private void makeSnippet() throws IOException{
-        searchs = youtube.search().list(YoutubeUtil.getSearchParam());
-        videos = youtube.videos().list(YoutubeUtil.getVideosParam());
-        channels = youtube.subscriptions().list(YoutubeUtil.getChannelsParam());
-        liveStreams = youtube.liveStreams().list(YoutubeUtil.getLiveStreamparam());
-        playlists = youtube.playlists().list(YoutubeUtil.getPlaylistsParam());
-    }
-    private void makeFields(){
-        searchs.setType("video");
-        searchs.setFields(
-                "items(id/kind,id/videoId,"
-                + "snippet/title,"
-                + "snippet/channelTitle,"
-                + "snippet/publishedAt)"
-        );
-        videos.setFields(
-                "items("
-                    + "id,"
-                    + "kind,"
-                    + "snippet/title,"
-                    + "snippet/channelTitle,"
-                    + "snippet/publishedAt,"
-                    + "contentDetails/duration,"
-                    + "statistics/viewCount"
-                + ")"
-        );
-        channels.setFields(
-                "items("
-                    + "id,"
-                    + "kind,"
-                    + "snippet/title,"
-                    + "snippet/description,"
-                    + "snippet/channelId,"
-                    + "snippet/thumbnails,"
-                    + "contentDetails/totalItemCount"
-                + ")"
-        );
-    }
+        
     @Override
     public Response search(String query) {
         return new Response(true, null, "Data found!");
@@ -114,7 +77,7 @@ public class ServiceYoutube implements Service{
         Response response;
         try {
             videos.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
-            videos.setChart("mostPopular");//chartUnspecified
+            videos.setChart("mostPopular");
             videos.setRegionCode("ID");
             VideoListResponse listResponse = videos.execute();
             List<com.google.api.services.youtube.model.Video> resultList = listResponse.getItems();
@@ -155,7 +118,7 @@ public class ServiceYoutube implements Service{
     }
 
     @Override
-    public Response popularChannel() {
+    public Response subscriptionChannel() {
         Response response;
         try {
             channels.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
@@ -192,12 +155,79 @@ public class ServiceYoutube implements Service{
 
     @Override
     public Response trending() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Response response;
+        try {
+            videos.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            videos.setChart("mostPopular");
+            videos.setRegionCode("ID");
+            VideoListResponse listResponse = videos.execute();
+            List<com.google.api.services.youtube.model.Video> resultList = listResponse.getItems();
+            List<Video> list = new ArrayList<>();
+            if (resultList != null) {
+                Iterator<com.google.api.services.youtube.model.Video> iteratorSearchResults = resultList.iterator();
+                while (iteratorSearchResults.hasNext()) {
+                    com.google.api.services.youtube.model.Video singleVideo = iteratorSearchResults.next();
+                    Video video = new Video();
+                    video.setVideoID(singleVideo.getId());
+                    video.setVideoTitle(singleVideo.getSnippet().getTitle());
+                    video.setChannelTitle(singleVideo.getSnippet().getChannelTitle());
+                    video.setPublishedAt(
+                            duration.publishFormat(
+                                singleVideo.getSnippet().getPublishedAt().getValue()
+                            )
+                    );
+                    video.setDuration(
+                            duration.format(
+                                singleVideo.getContentDetails().getDuration())
+                    );
+                    video.setViews(
+                            viewer.format(
+                                singleVideo.getStatistics().getViewCount().longValue()
+                            )
+                    );
+                    String thumbnailURL = "https://i.ytimg.com/vi/" + singleVideo.getId() + "/mqdefault.jpg";
+                    video.setThumbnailURL(thumbnailURL);
+                    list.add(video);
+                }
+            }
+            response = new Response(true, list, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
     }
     
     @Override
     public Response subscription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Response response;
+//        GoogleSignInOptions
+        try {
+            channels.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            channels.setMine(true);
+            SubscriptionListResponse listResponse = channels.execute();
+            List<com.google.api.services.youtube.model.Subscription> resultList = listResponse.getItems();
+            List<Channel> list = new ArrayList<>();
+            if (resultList != null) {
+                Iterator<com.google.api.services.youtube.model.Subscription> iteratorSearchResults = resultList.iterator();
+                while (iteratorSearchResults.hasNext()) {
+                    com.google.api.services.youtube.model.Subscription singleChannel = iteratorSearchResults.next();
+                    Channel channel = new Channel();
+                    channel.setVideoID(singleChannel.getId());
+                    channel.setChannelTitle(singleChannel.getSnippet().getTitle());
+                    channel.setDescription(singleChannel.getSnippet().getDescription());
+                    channel.setChannelId(singleChannel.getSnippet().getChannelId());
+                    channel.setTotalItemCount(singleChannel.getContentDetails().getTotalItemCount()+"");
+                    channel.setThumbnailURL(singleChannel.getSnippet().getThumbnails().getDefault().getUrl());
+                    list.add(channel);
+                }
+            }
+            response = new Response(true, list, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
     }
     
     @Override
@@ -220,4 +250,26 @@ public class ServiceYoutube implements Service{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
+    private void initKey(){
+        search.setKey(YoutubeUtil.getKey());
+        videos.setKey(YoutubeUtil.getKey());
+        channels.setKey(YoutubeUtil.getKey());
+        liveStreams.setKey(YoutubeUtil.getKey());
+        playlists.setKey(YoutubeUtil.getKey());
+    }
+    
+    private void makeSnippet() throws IOException{
+        search = youtube.search().list(YoutubeUtil.getSearchParam());
+        videos = youtube.videos().list(YoutubeUtil.getVideosParam());
+        channels = youtube.subscriptions().list(YoutubeUtil.getChannelsParam());
+        liveStreams = youtube.liveStreams().list(YoutubeUtil.getLiveStreamparam());
+        playlists = youtube.playlists().list(YoutubeUtil.getPlaylistsParam());
+    }
+    private void makeFields(){
+        search.setType("video");
+        search.setFields(YoutubeUtil.getSearchField());
+        videos.setFields(YoutubeUtil.getVideosField());
+        channels.setFields(YoutubeUtil.getChannelsField());
+    }
 }

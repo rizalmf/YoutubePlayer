@@ -41,7 +41,7 @@
          <children>
             <VBox fx:id="channelBox" spacing="20.0">
                <children>
-                  <Label text="Popular Channels">
+                  <Label text="Your Subscriptions">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>

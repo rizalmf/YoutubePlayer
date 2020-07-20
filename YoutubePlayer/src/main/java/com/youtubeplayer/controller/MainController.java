@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 rizal.
+ * Copyright 2020 Java Programmer Indonesia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,8 +143,8 @@ public class MainController implements Initializable {
      */
     private void serviceInitiation(){
         try {
-//            service = new ServiceTemp();
-            service = new ServiceYoutube();
+            //service = ServiceTemp.getInstance();
+            service = ServiceYoutube.getInstance();
         } catch (Exception e) {
             exceptions.log(e);
             //failed

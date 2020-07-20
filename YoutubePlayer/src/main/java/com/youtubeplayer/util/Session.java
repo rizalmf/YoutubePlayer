@@ -15,24 +15,26 @@
  */
 package com.youtubeplayer.util;
 
+import java.util.prefs.Preferences;
+
 /**
  *
  * @author rizal
  */
-public class Viewer {
+public class Session {
+    private Preferences p;
     
-    public String format(long v){
-        String viewer="0";
-        long big = v / 1000000;
-        long small = v / 1000;
-        
-        if(big >= 1000){ viewer = ((int) (big/1000))+"B"; }
-        else if(big >= 1){ 
-            viewer = ((int) big)+"M"; 
-        }else {
-            viewer = ((int) small)+"K"; 
-        }
-        
-        return viewer+" views";
+    private void saveCredentialToken(String accessToken, String refreshToken){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.put("accessToken", accessToken);
+        p.put("refreshToken", refreshToken);
+    }
+    
+    private String[] getCredentialToken(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        String[] token = new String[2];
+        token[0] = p.get("accessToken", "");
+        token[1] = p.get("refreshToken", "");
+        return token;
     }
 }

@@ -20,6 +20,9 @@
 .label{
     -fx-text-fill:#ffffffcc;
 }
+.jfx-progress-bar .bar{
+    -fx-background-color:red;
+}
 #lBlack{
    -fx-text-fill:#000000; 
 }

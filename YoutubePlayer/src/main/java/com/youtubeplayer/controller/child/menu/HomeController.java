@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 rizal.
+ * Copyright 2020 Java Programmer Indonesia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -167,7 +167,7 @@ public class HomeController implements Initializable {
         Task task = new Task() {
             @Override
             protected Object call() throws Exception {
-                initPopularChannel();
+                initSubscriptionChannel();
                 return null;
             }
         };
@@ -177,8 +177,8 @@ public class HomeController implements Initializable {
         new Thread(task).start();
     }
     
-    private void initPopularChannel(){
-        Response response = service.popularChannel();
+    private void initSubscriptionChannel(){
+        Response response = service.subscriptionChannel();
         if(response.isStatus()){
             subscriptionList = (List<Channel>) response.getData();
             buildPopularChannel();

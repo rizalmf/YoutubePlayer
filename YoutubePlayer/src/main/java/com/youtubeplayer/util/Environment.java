@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 rizal.
+ * Copyright 2020 Java Programmer Indonesia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ public class Environment {
             
             //API KEY
             env.put("KEY", p.getProperty("KEY"));
-            //env.put("OAUTH_RESPONSE", p.getProperty("OAUTH_RESPONSE"));
             
             //credential
             env.put("OAUTH", p.getProperty("OAUTH"));
@@ -59,14 +58,6 @@ public class Environment {
         }
         
     }
-    /**
-     * env.put("KEY", "AIzaSyBBdq9M--jc1nWrxiseJAQ1nawFJ8fT2Lg");
-        env.put("OAUTH_RESPONSE", "4/2AG5er-VAo2bHDpammhiJnvPAT64L2Z6VAHcHlXVd32f8hciIPfwApc");
-        env.put("OAUTH", "805794483723-n78trb8krf83tcbe0tj91eobseusbg7m.apps.googleusercontent.com");
-        env.put("SECRET", "HsY0fqnsgwm-vwSzMM-j3O-A");
-     * @param key
-     * @return 
-     */
     
     public String get(String key){
         return env.get(key);

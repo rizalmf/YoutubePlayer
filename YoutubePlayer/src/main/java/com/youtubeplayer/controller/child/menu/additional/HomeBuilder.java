@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 rizal.
+ * Copyright 2020 Java Programmer Indonesia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -216,17 +216,17 @@ public class HomeBuilder {
         pane.setPrefSize(24, 24);
         pane.setMaxHeight(24);
         pane.setId("whitenode");
-        pane.setClip(new Circle(12));
+        pane.setClip(new Circle(12, 12, 12));
 
         Label lChannel = new Label(c.getChannelTitle());
         lChannel.setTooltip(new Tooltip(c.getDescription()));
         lChannel.setId("lWhite");
-        lChannel.setMaxWidth(150);
+        lChannel.setMaxWidth(135);
 
         Label lVideos = new Label(c.getTotalItemCount()+" Videos");
         lVideos.setId("lDark");
 
-        JFXButton button = new JFXButton("SUBSCRIBE");
+        JFXButton button = new JFXButton("OPEN");
         button.setId("bSubscribe");
         HBox buttonBox = new HBox(button);
         HBox.setHgrow(buttonBox, Priority.ALWAYS);

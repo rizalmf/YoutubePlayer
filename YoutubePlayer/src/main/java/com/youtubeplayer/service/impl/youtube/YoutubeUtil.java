@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2020 Java Programmer Indonesia.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.youtubeplayer.service.impl.youtube;
 
@@ -15,12 +25,6 @@ import java.security.GeneralSecurityException;
  * @author rizal
  */
 public class YoutubeUtil {
-    private static final String searchParam = "id,snippet";
-    private static final String videosParam = "id,snippet,contentDetails,statistics";
-    private static final String channelsParam = "id,snippet,contentDetails";
-    private static final String liveStreamParam = "";
-    private static final String playlistsParam = "";
-    
     public static YouTube initiateService() throws IOException, GeneralSecurityException{
         return YoutubeAPI.getYoutube(new Environment().APP_NAME());
     }
@@ -28,6 +32,13 @@ public class YoutubeUtil {
     public static String getKey(){
         return new Environment().get("KEY");
     }
+    
+    //Params
+    private static final String searchParam = "id,snippet";
+    private static final String videosParam = "id,snippet,contentDetails,statistics";
+    private static final String channelsParam = "id,snippet,contentDetails";
+    private static final String liveStreamParam = "";
+    private static final String playlistsParam = "";
     
     public static String getSearchParam(){
         return searchParam;
@@ -47,5 +58,52 @@ public class YoutubeUtil {
     
     public static String getPlaylistsParam(){
         return playlistsParam;
+    }
+    
+    //Fields
+    private static final String searchField = 
+            "items("
+                + "id/kind,"
+                + "id/videoId,"
+                + "snippet/title,"
+                + "snippet/channelTitle,"
+                + "snippet/publishedAt"
+            + ")"
+        ;
+    private static final String videosField = 
+            "items("
+                + "id,"
+                + "kind,"
+                + "snippet/title,"
+                + "snippet/channelTitle,"
+                + "snippet/publishedAt,"
+                + "contentDetails/duration,"
+                + "statistics/viewCount"
+            + ")";
+    private static final String channelsField = 
+            "items("
+                + "id,"
+                + "kind,"
+                + "snippet/title,"
+                + "snippet/description,"
+                + "snippet/channelId,"
+                + "snippet/thumbnails,"
+                + "contentDetails/totalItemCount"
+            + ")";
+    private static final String liveStreamField = "";
+    private static final String playlistsField = "";
+    
+    
+    
+    public static String getSearchField(){
+        return searchField;
+    }
+    
+    public static String getVideosField(){
+        return videosField;
+    }
+    
+    public static String getChannelsField(){
+        return channelsField;
     }
 }
