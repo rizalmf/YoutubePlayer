@@ -24,17 +24,50 @@ import java.util.prefs.Preferences;
 public class Session {
     private Preferences p;
     
-    private void saveCredentialToken(String accessToken, String refreshToken){
+    //START CREDENTIAL SESSION 
+    public void saveCredentialToken(String accessToken, String refreshToken){
         p = Preferences.userRoot().node("youtubeplayer");
         p.put("accessToken", accessToken);
         p.put("refreshToken", refreshToken);
     }
-    
-    private String[] getCredentialToken(){
+    public String[] getCredentialToken(){
         p = Preferences.userRoot().node("youtubeplayer");
         String[] token = new String[2];
         token[0] = p.get("accessToken", "");
         token[1] = p.get("refreshToken", "");
         return token;
     }
+    //END CREDENTIAL SESSION START
+        
+    //START VERSION SESSION
+    public void setInstalledVersion(String version){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.put("version", version);
+    }
+    public String getInstalledVersion(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        return p.get("version", "");
+    }
+    //END VERSION SESSION
+    
+    //START LOGIN SESSION
+    public boolean isLogin(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        return p.getBoolean("is_login", false);
+    }
+    public void setLogin(boolean is_login){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.putBoolean("is_login", is_login);
+    }
+    public boolean isRefreshLogin(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        return p.getBoolean("refresh_login", false);
+    }
+    public void setRefreshLogin(boolean refresh_login){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.putBoolean("refresh_login", refresh_login);
+    }
+    //END LOGIN SESSION
+    
+    
 }

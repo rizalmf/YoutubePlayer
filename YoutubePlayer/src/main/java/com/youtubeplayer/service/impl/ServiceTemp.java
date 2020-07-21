@@ -21,7 +21,7 @@ import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
 import com.youtubeplayer.service.Service;
-import com.youtubeplayer.util.Duration;
+import com.youtubeplayer.util.formatter.Duration;
 
 /**
  * Temporary data test
@@ -62,6 +62,11 @@ public class ServiceTemp implements Service{
         return list;
     }
 
+    @Override
+    public Response user() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     @Override
     public Response search(String query) {
         return new Response(true, createVideoList(52), "Data found!");
@@ -123,4 +128,5 @@ public class ServiceTemp implements Service{
     public Response likedVideos() {
         return new Response(true, createVideoList(52), "Data found!");
     }
+
 }

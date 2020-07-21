@@ -52,6 +52,13 @@ import javafx.concurrent.Task;
 public class MainController implements Initializable {
     private final Exceptions exceptions = new Exceptions(this.getClass());
     
+    private NodeBuilder builder;
+    public static Service service;
+    private boolean graphicOnly;
+    private String closeTooltip;
+    private String minimizeTooltip;
+    private String githubTooltip;
+    
     @FXML
     private AnchorPane parent;
     @FXML
@@ -92,16 +99,13 @@ public class MainController implements Initializable {
     private VBox contentParent;
     @FXML
     private JFXButton bGithub;
-    
-    private NodeBuilder builder;
-    public static Service service;
-    private boolean graphicOnly;
-    private String closeTooltip;
-    private String minimizeTooltip;
-    private String githubTooltip;
-    
     @FXML
     private HBox windowBoxChild;
+    @FXML
+    private HBox userBox;
+    @FXML
+    private VBox loadingBox;
+    
     /**
      * Initializes the controller class.
      */

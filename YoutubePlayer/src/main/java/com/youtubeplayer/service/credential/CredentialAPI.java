@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.youtubeplayer.service.impl.credential;
+package com.youtubeplayer.service.credential;
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -45,7 +46,15 @@ public class CredentialAPI {
             )
             .build();
     }
-    public Credential buildCredential(){
-       return  null;
+    
+    protected static GoogleCredential.Builder getCredentialBuilder(){
+       Environment env = new Environment();
+       return new GoogleCredential.Builder()
+                .setTransport(new NetHttpTransport())
+                .setJsonFactory(new JacksonFactory())
+                .setClientSecrets(
+                    env.get("OAUTH"),
+                    env.get("SECRET")    
+                );
     }
 }

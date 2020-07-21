@@ -37,12 +37,12 @@ public class Environment {
     }
     private void initiateEnvironment(){
         try {
-            env = new HashMap<>();
             FileReader reader=new FileReader("key.properties");  
 
             Properties p=new Properties();  
             p.load(reader);  
             
+            env = new HashMap<>();
             //APP_NAME
             env.put("NAME", p.getProperty("NAME"));
             

@@ -16,6 +16,7 @@
 package com.youtubeplayer.service.impl;
 
 import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.SubscriptionListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
 import java.io.IOException;
@@ -25,9 +26,9 @@ import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
 import com.youtubeplayer.service.Service;
-import com.youtubeplayer.service.impl.youtube.YoutubeUtil;
-import com.youtubeplayer.util.Duration;
-import com.youtubeplayer.util.Viewer;
+import com.youtubeplayer.service.youtube.YoutubeUtil;
+import com.youtubeplayer.util.formatter.Duration;
+import com.youtubeplayer.util.formatter.Viewer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -42,6 +43,7 @@ public class ServiceYoutube implements Service{
 
     private final long NUMBER_OF_VIDEOS_RETURNED = 54;
     private final YouTube youtube;
+    private YouTube.Channels.List userChannels;
     private YouTube.Search.List search;
     private YouTube.Videos.List videos;
     private YouTube.Subscriptions.List channels;
@@ -58,13 +60,38 @@ public class ServiceYoutube implements Service{
     }
     
     private ServiceYoutube() throws Exception{
-        System.out.println("initiating youtube service");
         duration = new Duration();
         viewer = new Viewer();
         youtube = YoutubeUtil.initiateService();
         makeSnippet();
         initKey();
         makeFields();
+    }
+    
+    @Override
+    public Response user() {
+        Channel channel= null;
+        try {
+            userChannels.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            userChannels.setMine(true);
+            ChannelListResponse listResponse = userChannels.execute();
+            List<com.google.api.services.youtube.model.Channel> resultList = listResponse.getItems();
+            if (resultList != null) {
+                Iterator<com.google.api.services.youtube.model.Channel> iteratorSearchResults = resultList.iterator();
+                if (iteratorSearchResults.hasNext()) {
+                    com.google.api.services.youtube.model.Channel singleChannel = iteratorSearchResults.next();
+                    channel = new Channel();
+                    channel.setVideoID(singleChannel.getId());
+                    channel.setChannelTitle(singleChannel.getSnippet().getTitle());
+                    channel.setThumbnailURL(singleChannel.getSnippet().getThumbnails().getDefault().getUrl());
+                }
+            }
+        } catch (Exception e) {
+            exceptions.log(e);
+        }
+        return (channel != null)? 
+                new Response(true, channel, "get data success") 
+                : new Response(false, null, "get data failed");
     }
         
     @Override
@@ -260,6 +287,7 @@ public class ServiceYoutube implements Service{
     }
     
     private void makeSnippet() throws IOException{
+        userChannels = youtube.channels().list(YoutubeUtil.getUserChannelParam());
         search = youtube.search().list(YoutubeUtil.getSearchParam());
         videos = youtube.videos().list(YoutubeUtil.getVideosParam());
         channels = youtube.subscriptions().list(YoutubeUtil.getChannelsParam());
@@ -267,9 +295,11 @@ public class ServiceYoutube implements Service{
         playlists = youtube.playlists().list(YoutubeUtil.getPlaylistsParam());
     }
     private void makeFields(){
+        userChannels.setFields(YoutubeUtil.getUserChannelField());
         search.setType("video");
         search.setFields(YoutubeUtil.getSearchField());
         videos.setFields(YoutubeUtil.getVideosField());
         channels.setFields(YoutubeUtil.getChannelsField());
     }
+
 }

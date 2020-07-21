@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.youtubeplayer.service.impl.youtube;
+package com.youtubeplayer.service.youtube;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.samples.youtube.cmdline.Auth;
 import com.google.api.services.youtube.YouTube;
-import com.youtubeplayer.service.impl.credential.CredentialUtil;
+import com.youtubeplayer.service.credential.CredentialUtil;
+import com.youtubeplayer.util.Session;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -30,11 +31,10 @@ import java.security.GeneralSecurityException;
 public class YoutubeAPI {
     protected static YouTube getYoutube(String AppName) throws IOException, GeneralSecurityException{
         NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        boolean use_login =true; //set true to use credential
         return new YouTube.Builder(
                 Auth.HTTP_TRANSPORT, 
                 Auth.JSON_FACTORY, 
-                (use_login)? CredentialUtil.getCredential(httpTransport) : (HttpRequest) -> {})
+                (new Session().isLogin())? CredentialUtil.getCredential(httpTransport) : (HttpRequest) -> {})
                     .setApplicationName(AppName)
                     .build();
     }

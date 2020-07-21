@@ -22,6 +22,13 @@ import com.youtubeplayer.model.Response;
  * @author rizal
  */
 public interface Service {
+    //START GET DATA USER LOGIN
+    /**
+     * get information user
+     * @return Response
+     */
+    Response user();
+    //END GET DATA USER LOGIN
         
     //START MENU CONTENT
     /**

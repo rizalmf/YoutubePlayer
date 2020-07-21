@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.youtubeplayer.service.impl.youtube;
+package com.youtubeplayer.service.youtube;
 
 import com.google.api.services.youtube.YouTube;
 import com.youtubeplayer.util.Environment;
@@ -34,11 +34,16 @@ public class YoutubeUtil {
     }
     
     //Params
+    private static final String userChannelParam = "id,snippet";
     private static final String searchParam = "id,snippet";
     private static final String videosParam = "id,snippet,contentDetails,statistics";
     private static final String channelsParam = "id,snippet,contentDetails";
     private static final String liveStreamParam = "";
     private static final String playlistsParam = "";
+    
+    public static String getUserChannelParam(){
+        return userChannelParam;
+    }
     
     public static String getSearchParam(){
         return searchParam;
@@ -61,6 +66,13 @@ public class YoutubeUtil {
     }
     
     //Fields
+    private static final String userChannelField = 
+            "items("
+                + "id,"
+                + "kind,"
+                + "snippet/title,"
+                + "snippet/thumbnails"
+            + ")";
     private static final String searchField = 
             "items("
                 + "id/kind,"
@@ -68,8 +80,7 @@ public class YoutubeUtil {
                 + "snippet/title,"
                 + "snippet/channelTitle,"
                 + "snippet/publishedAt"
-            + ")"
-        ;
+            + ")";
     private static final String videosField = 
             "items("
                 + "id,"
@@ -93,7 +104,9 @@ public class YoutubeUtil {
     private static final String liveStreamField = "";
     private static final String playlistsField = "";
     
-    
+    public static String getUserChannelField(){
+        return userChannelField;
+    }
     
     public static String getSearchField(){
         return searchField;

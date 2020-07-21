@@ -272,6 +272,7 @@
                               </JFXTextField>
                            </children>
                         </HBox>
+                        <HBox fx:id="userBox" alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="35.0" right="20.0" top="28.0" />
