@@ -5,3 +5,36 @@
 .mainFxmlClass {
 
 }
+
+.jfx-button .jfx-rippler{
+    -jfx-rippler-fill:#100d19;
+}
+#bClose{
+    -fx-background-radius:5em;
+}
+#topBar{
+    -fx-background-color: #00000066;
+    -fx-background-radius: 7px 7px 0px 0px;
+}
+#mainBox{
+    -fx-background-color: #100d19;
+    -fx-background-radius: 7px;
+}
+#bUser{
+    -fx-text-fill:white;
+    -fx-background-color: red;
+    -fx-font-size:11px;
+}
+#box{
+    -fx-alignment:TOP_CENTER;
+}
+#lUser{
+    -fx-fill:#ffffff;
+    -fx-text-fill:#ffffff;
+    -fx-font-size:13px;
+    -fx-font-weight: bold;
+    -fx-wrap-text:true;
+}
+#cbRegion .list-cell:selected{
+    -fx-text-fill:#ffffff;
+}

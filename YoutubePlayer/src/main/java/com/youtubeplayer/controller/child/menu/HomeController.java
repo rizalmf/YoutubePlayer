@@ -33,8 +33,12 @@ import javafx.util.Duration;
 import static com.youtubeplayer.controller.MainController.service;
 import com.youtubeplayer.controller.child.menu.additional.HomeBuilder;
 import com.youtubeplayer.model.Channel;
+import com.youtubeplayer.model.Mixes;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.scene.layout.GridPane;
 
 /**
  * FXML Controller class
@@ -65,7 +69,7 @@ public class HomeController implements Initializable {
     private HomeBuilder builder;
     private List<Video> recomendList;
     private List<Channel> subscriptionList;
-    private List<Video> videomixList;
+    private List<Mixes> videomixList;
 
     /**
      * Initializes the controller class.
@@ -124,7 +128,15 @@ public class HomeController implements Initializable {
             }
         };
         task.setOnSucceeded((t) -> {
-            bottomBoxProperties();
+            new Thread(() -> {
+                bottomBoxProperties();
+            }).start();
+//            new Timer().schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    bottomBoxProperties();
+//                }
+//            }, 0);
         });
         new Thread(task).start();
     }
@@ -143,13 +155,11 @@ public class HomeController implements Initializable {
     }
     private void buildRecomendation(boolean expand){
         Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
-            Platform.runLater(() -> {
                 if(expand){
                     spRecomend.setContent(builder.buildRecommendExpand(recomendList));
                 }else spRecomend.setContent(
                         builder.buildRecommendCollapse(
                                 recomendList.subList(0, recomendList.size()/4)));
-            });
         }));
         //give breath
         tl.setDelay(Duration.millis(500));
@@ -172,7 +182,15 @@ public class HomeController implements Initializable {
             }
         };
         task.setOnSucceeded((t) -> {
-            initVideoMix();
+            new Thread(() -> {
+                initVideoMix();
+            }).start();
+//            new Timer().schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    initVideoMix();
+//                }
+//            }, 0);
         });
         new Thread(task).start();
     }
@@ -186,9 +204,7 @@ public class HomeController implements Initializable {
     }
     private void buildPopularChannel(){
         Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
-            Platform.runLater(() -> {
-                spPopular.setContent(builder.buildPopularChannel(subscriptionList));
-            });
+            spPopular.setContent(builder.buildPopularChannel(subscriptionList));
         }));
         tl.play();
     }
@@ -196,15 +212,13 @@ public class HomeController implements Initializable {
     private void initVideoMix(){
         Response response = service.videoMix();
         if(response.isStatus()){
-            videomixList = (List<Video>) response.getData();
+            videomixList = (List<Mixes>) response.getData();
             buildVideoMix();
         }
     }
     private void buildVideoMix(){
         Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
-            Platform.runLater(() -> {
-                spMixes.setContent(builder.buildVideoMix(videomixList));
-            });
+            spMixes.setContent(builder.buildVideoMix(videomixList));
         }));
         tl.play();
     }

@@ -37,12 +37,24 @@ import static com.youtubeplayer.controller.additional.RoleMenu.HOME_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.LIKED_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.LIVE_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.QUEUE_PATH;
+import static com.youtubeplayer.controller.additional.RoleMenu.SETTING_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.SUBSCRIPTION_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.TRENDING_PATH;
+import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.service.Service;
 import com.youtubeplayer.service.impl.ServiceTemp;
 import com.youtubeplayer.service.impl.ServiceYoutube;
+import com.youtubeplayer.util.Session;
+import java.io.IOException;
+import java.util.Map;
 import javafx.concurrent.Task;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -177,19 +189,23 @@ public class MainController implements Initializable {
      * Sidebar parent
      */
     private void sideBarProperties(){
-        parent.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double width = newVal.doubleValue();
-            if(width < 800 && !graphicOnly){
-                mainBox.getChildren().remove(sideBar);
-                contentParent.setId("mainPane-alt");
-                graphicOnly = true;
-            }else if(width > 900 && graphicOnly){
-                mainBox.getChildren().add(0, sideBar);
-                contentParent.setId("mainPane");
-                graphicOnly = false;
-            }
-        });    
-        
+        Session session = new Session();
+        bLogo.setId((session.isYoutubeKids())? "logo-alt": "logo");
+        if (!session.isRefreshLogin()) {
+            parent.widthProperty().addListener((obs, oldVal, newVal) -> {
+                double width = newVal.doubleValue();
+                if(width < 800 && !graphicOnly){
+                    mainBox.getChildren().remove(sideBar);
+                    contentParent.setId("mainPane-alt");
+                    graphicOnly = true;
+                }else if(width > 900 && graphicOnly){
+                    mainBox.getChildren().add(0, sideBar);
+                    contentParent.setId("mainPane");
+                    graphicOnly = false;
+                }
+            });  
+        }
+  
         menuProperties();
         libraryProperties();
         playListProperties();  
@@ -198,9 +214,20 @@ public class MainController implements Initializable {
             //login needs
         });
         
-        //versioning
         Platform.runLater(() -> {
+            //versioning
             lVersion.setText("Youtube App ");
+
+            //user information
+            userBox.getChildren().clear();
+            Map<String, Object> userMap = builder.user();
+            JFXButton bUser = (JFXButton) userMap.get("node");
+            Channel userChannel = (Channel) userMap.get("user");
+            bUser.setOnAction((e) -> { initSetting(userChannel); });
+            userBox.getChildren().add(bUser);
+            
+            //make sure login prompt not show up
+            new Session().setRefreshLogin(false);
         });
     }
     
@@ -302,5 +329,41 @@ public class MainController implements Initializable {
             windowBoxChild.setVisible(false);
         });
         bGithub.setOnAction((e) -> { builder.github(); });
+    }
+    /**
+     * open setting stage
+     * @param userChannel 
+     */
+    private void initSetting(Channel userChannel){
+        FXMLLoader fxmlLoader = new FXMLLoader(
+                getClass().getClassLoader().getResource(SETTING_PATH));
+        Parent root = null;
+        try {
+            root = (Parent) fxmlLoader.load();
+        } catch (IOException ex) {
+            exceptions.log(ex);
+        }
+        SettingController settingController = fxmlLoader.getController();
+        settingController.setUserChannel(userChannel);
+        Stage stage = new Stage();
+        stage.setOnCloseRequest((e) -> {
+            stage.close();
+        });
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Setting");
+        stage.getIcons().add(new Image(
+                getClass().getClassLoader().getResourceAsStream("logo-min.png")));
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);  
+        stage.showAndWait();
+        Session session = new Session();
+        if(session.isRefreshLogin()){
+            contentBox.getChildren().clear();
+            contentBox.getChildren().add(loadingBox);
+            initiation();
+        }
+        bLogo.setId((session.isYoutubeKids())? "logo-alt": "logo");
     }
 }

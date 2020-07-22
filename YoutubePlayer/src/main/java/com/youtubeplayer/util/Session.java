@@ -38,17 +38,6 @@ public class Session {
         return token;
     }
     //END CREDENTIAL SESSION START
-        
-    //START VERSION SESSION
-    public void setInstalledVersion(String version){
-        p = Preferences.userRoot().node("youtubeplayer");
-        p.put("version", version);
-    }
-    public String getInstalledVersion(){
-        p = Preferences.userRoot().node("youtubeplayer");
-        return p.get("version", "");
-    }
-    //END VERSION SESSION
     
     //START LOGIN SESSION
     public boolean isLogin(){
@@ -69,5 +58,37 @@ public class Session {
     }
     //END LOGIN SESSION
     
+    //START KIDS SESSION
+    public void setYoutubeKids(boolean kids_safe){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.putBoolean("kids_safe", kids_safe);
+    }
+    public Boolean isYoutubeKids(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        return p.getBoolean("kids_safe", false);
+    }
+    //END KIDS SESSION
     
+    //START REGION SESSION
+    public void setRegion(String region){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.put("region", region);
+    }
+    public String getRegion(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        return p.get("region", "ID");
+    }
+    //END REGION SESSION
+    
+    //START VERSION SESSION
+    public void setInstalledVersion(String version){
+        p = Preferences.userRoot().node("youtubeplayer");
+        p.put("version", version);
+    }
+    public String getInstalledVersion(){
+        p = Preferences.userRoot().node("youtubeplayer");
+        return p.get("version", "Na");
+    }
+    //END VERSION SESSION
+        
 }

@@ -18,9 +18,7 @@ package com.youtubeplayer.service.credential;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.youtubeplayer.util.Session;
 import java.io.IOException;
 
@@ -31,20 +29,23 @@ import java.io.IOException;
 public class CredentialUtil {
      public static Credential getCredential(final NetHttpTransport httpTransport) throws IOException { 
         Credential credential;
-        if(new Session().isRefreshLogin()){
+        Session session = new Session();
+        if(session.isRefreshLogin()){
             //request token
             credential = new AuthorizationCodeInstalledApp(
                 CredentialAPI.getAuthorization(httpTransport), 
                 new LocalServerReceiver()).authorize("user");
-            
             //save session
-            new Session().saveCredentialToken(
+            session.saveCredentialToken(
                     credential.getAccessToken(), 
                     credential.getRefreshToken()
             );
+            session.setRefreshLogin(false);
         }else {
             credential = CredentialAPI.getCredentialBuilder()
                 .build();
+            
+            //get session
             String[] token = new Session().getCredentialToken();
             credential.setAccessToken(token[0]);
             credential.setRefreshToken(token[1]);

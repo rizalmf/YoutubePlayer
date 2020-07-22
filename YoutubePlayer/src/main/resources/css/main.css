@@ -9,6 +9,9 @@
    -fx-background-color:transparent;
    -fx-text-fill:#ffffffcc;
 }
+#topRight{
+    -fx-alignment:TOP_RIGHT;
+}
 #buttonnode{
     -fx-background-color:white;
     -fx-padding:0px;
@@ -22,6 +25,13 @@
 }
 .jfx-progress-bar .bar{
     -fx-background-color:red;
+}
+#bSetting{
+    -fx-font-size:11px;
+    -fx-font-weight:bold;
+    -fx-text-fill: white;
+    -fx-text-alignment:right;
+    -fx-background-color:#00000075;
 }
 #lBlack{
    -fx-text-fill:#000000; 
@@ -49,12 +59,12 @@
 }
 #logo{
     -fx-background-image: url("../images/logo-min.png");
-    -fx-background-size: 100%;
+    -fx-background-size: 70px;
     -fx-background-repeat:no-repeat;
-    -fx-background-position:center, left;
+    -fx-background-position:left, left;
 }
 #logo-alt{
-    -fx-background-image: url("../logo-min.png");
+    -fx-background-image: url("../images/logo-kids.png");
     -fx-background-size: stretch;
     -fx-background-repeat:no-repeat;
     -fx-background-position:center, left;
@@ -195,6 +205,7 @@
     -fx-padding:0px;
 }
 #lTrendingOther{
+    -fx-wrap-text:true;
     -fx-text-fill:#ffffffb6;
     -fx-font-size:10px;
     -fx-padding:0px;

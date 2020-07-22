@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXNodesList?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -49,5 +51,12 @@
          </children>
       </StackPane>
       <JFXButton layoutX="135.0" layoutY="329.0" />
+      <JFXNodesList alignment="TOP_RIGHT" layoutX="528.0" layoutY="116.0">
+         <children>
+            <Button mnemonicParsing="false" style="-fx-background-color: blue;" text="Button" />
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="d" />
+            <Button layoutX="10.0" layoutY="36.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="Button" />
+         </children>
+      </JFXNodesList>
    </children>
 </AnchorPane>

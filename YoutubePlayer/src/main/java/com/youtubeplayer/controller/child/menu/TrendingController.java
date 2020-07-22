@@ -83,20 +83,19 @@ public class TrendingController implements Initializable {
     }
     private void initTrending(){
         new Thread(() -> {
-                Response response = service.trending();
-                if(response.isStatus()){
-                    trendingList = (List<Video>) response.getData();
-                    buildTrending();
-                }
-            }).start();
+            Response response = service.trending();
+            if(response.isStatus()){
+                trendingList = (List<Video>) response.getData();
+                buildTrending();
+            }
+        }).start();
     }
     private void buildTrending(){
         Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
-            Platform.runLater(() -> {
-                spTrending.setContent(builder.buildTrending(trendingList));
-            });
+            //Platform.runLater(() -> {
+            spTrending.setContent(builder.buildTrending(trendingList));
+            //});
         }));
-        tl.setDelay(Duration.millis(300));
         tl.play();
     }
 }

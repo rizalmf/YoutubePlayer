@@ -30,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import static com.youtubeplayer.controller.MainController.service;
 import com.youtubeplayer.controller.child.menu.additional.SubscriptionBuilder;
+import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
 
@@ -47,7 +48,7 @@ public class SubscriptionController implements Initializable {
     @FXML
     private ScrollPane spSubscription;
     
-    private List<Video> subscriptionList;
+    private List<Channel> subscriptionList;
     private SubscriptionBuilder builder;
 
     /**
@@ -83,20 +84,19 @@ public class SubscriptionController implements Initializable {
     }
     private void initSubscription(){
         new Thread(() -> {
-                Response response = service.live();
-                if(response.isStatus()){
-                    subscriptionList = (List<Video>) response.getData();
-                    buildSubscription();
-                }
-            }).start();
+            Response response = service.subscription();
+            if(response.isStatus()){
+                subscriptionList = (List<Channel>) response.getData();
+                buildSubscription();
+            }
+        }).start();
     }
     private void buildSubscription(){
         Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
-            Platform.runLater(() -> {
-                spSubscription.setContent(builder.buildSubscription(subscriptionList));
-            });
+           // Platform.runLater(() -> {
+            spSubscription.setContent(builder.buildSubscription(subscriptionList));
+            //});
         }));
-        tl.setDelay(Duration.millis(300));
         tl.play();
     }
 }

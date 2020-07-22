@@ -1,10 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="312.0" prefWidth="480.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="youtubeplayer.controller.SettingController">
-    <stylesheets>
-        <URL value="@/youtubeplayer/resources/css/setting.css" />
-    </stylesheets>
+<AnchorPane id="AnchorPane" fx:id="parent" prefHeight="312.0" prefWidth="480.0" styleClass="mainFxmlClass" stylesheets="@../css/setting.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.youtubeplayer.controller.SettingController">
+   <children>
+      <VBox id="mainBox" fx:id="mainBox" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+         <children>
+            <HBox id="topBar" alignment="CENTER_RIGHT">
+               <children>
+                  <JFXButton id="bClose" fx:id="bClose" contentDisplay="GRAPHIC_ONLY" prefHeight="28.0" prefWidth="28.0" ripplerFill="WHITE">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+            <VBox VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox fx:id="userBox" alignment="CENTER" spacing="5.0" VBox.vgrow="ALWAYS" />
+                        <HBox fx:id="buttonBox" alignment="TOP_CENTER" spacing="4.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </VBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="35.0" spacing="25.0">
+                     <children>
+                        <Label fx:id="lKids" text="Youtube For Kids" textFill="WHITE" />
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <JFXToggleButton fx:id="toggleKids" contentDisplay="GRAPHIC_ONLY" size="5.0" toggleColor="#dd0000" toggleLineColor="#e18787" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="15.0" right="30.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="255.0" prefHeight="35.0" spacing="25.0">
+                     <children>
+                        <Label fx:id="lRegion" text="Region" textFill="WHITE" />
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <JFXComboBox id="cbRegion" fx:id="cbRegion" focusColor="RED" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="15.0" right="30.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="-5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="99.0" prefHeight="35.0" spacing="25.0">
+                     <children>
+                        <Label text="Version" textFill="WHITE" />
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="lVersion" text=" " textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="15.0" right="30.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="-5.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </VBox>
+         </children>
+         <effect>
+            <DropShadow height="8.86" radius="3.9299999999999997" width="8.86" />
+         </effect>
+      </VBox>
+   </children>
 </AnchorPane>

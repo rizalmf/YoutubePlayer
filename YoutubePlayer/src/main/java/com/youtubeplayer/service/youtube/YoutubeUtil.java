@@ -33,13 +33,13 @@ public class YoutubeUtil {
         return new Environment().get("KEY");
     }
     
-    //Params
+    //Query params
     private static final String userChannelParam = "id,snippet";
     private static final String searchParam = "id,snippet";
-    private static final String videosParam = "id,snippet,contentDetails,statistics";
+    private static final String videosParam = "id,snippet,contentDetails,statistics";//takeout status
     private static final String channelsParam = "id,snippet,contentDetails";
+    private static final String playlistsParam = "id,snippet";
     private static final String liveStreamParam = "";
-    private static final String playlistsParam = "";
     
     public static String getUserChannelParam(){
         return userChannelParam;
@@ -86,10 +86,12 @@ public class YoutubeUtil {
                 + "id,"
                 + "kind,"
                 + "snippet/title,"
+                + "snippet/channelId,"
                 + "snippet/channelTitle,"
                 + "snippet/publishedAt,"
                 + "contentDetails/duration,"
-                + "statistics/viewCount"
+                + "statistics/viewCount,"
+                //+ "status/madeForKids"
             + ")";
     private static final String channelsField = 
             "items("
@@ -101,8 +103,15 @@ public class YoutubeUtil {
                 + "snippet/thumbnails,"
                 + "contentDetails/totalItemCount"
             + ")";
+    private static final String playlistsField = 
+            "items("
+                + "id,"
+                + "kind,"
+                + "snippet/title,"
+                + "snippet/channelId,"
+                + "snippet/thumbnails,"
+            + ")";
     private static final String liveStreamField = "";
-    private static final String playlistsField = "";
     
     public static String getUserChannelField(){
         return userChannelField;

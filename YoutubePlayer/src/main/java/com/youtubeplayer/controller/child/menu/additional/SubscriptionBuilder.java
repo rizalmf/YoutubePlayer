@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import com.youtubeplayer.Exception.Exceptions;
 import com.youtubeplayer.YoutubePlayer;
+import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Video;
 
 /**
@@ -51,14 +52,14 @@ public class SubscriptionBuilder {
      * @param list
      * @return content multiple rows
      */
-    public GridPane buildSubscription(List<Video> list){
+    public GridPane buildSubscription(List<Channel> list){
         GridPane grid = new GridPane();
         //grid.setPadding(new Insets(5));
         grid.setVgap(8);
         grid.setStyle("-fx-alignment: CENTER_LEFT;");
         int row = 0;
-        for (Video v : list) {
-            grid.add(subscriptionButton(v), 0, row++);
+        for (Channel c : list) {
+            grid.add(subscriptionButton(c), 0, row++);
         }
         return grid;
     }
@@ -72,11 +73,11 @@ public class SubscriptionBuilder {
                             false
             );
     }
-    private JFXButton subscriptionButton(Video v){
+    private JFXButton subscriptionButton(Channel channel){
         Image img = null;
         try {
-            if (!v.getThumbnailURL().isEmpty()) {
-                img =new Image(v.getThumbnailURL(), 175, 80, false, false, true);
+            if (!channel.getThumbnailURL().isEmpty()) {
+                img =new Image(channel.getThumbnailURL(), 175, 80, false, false, true);
             }else img =defaultThumbnailVideo();
         } catch (Exception e) {
             img =defaultThumbnailVideo();
@@ -88,28 +89,23 @@ public class SubscriptionBuilder {
         imageView.prefHeight(80);
         //imageView.setFitHeight(80);
         imageView.setFitWidth(175);
-        Label lDuration = new Label(v.getDuration().replaceAll(" ", ""));
-        lDuration.setId("lDuration");
-        HBox hb = new HBox(lDuration);
-        hb.setStyle("-fx-alignment: BOTTOM_RIGHT;-fx-padding:5px");
-        hb.setPrefSize(170, 72);
-        StackPane stack = new StackPane(imageView, hb);
+        StackPane stack = new StackPane(imageView);
         Rectangle rect = new Rectangle(175, 80);
         rect.setArcHeight(15);
         rect.setArcWidth(15);
         stack.setClip(rect);
 
-        Label lTitle = new Label(v.getVideoTitle());
+        Label lTitle = new Label(channel.getChannelTitle());
         lTitle.setId("lTrendinTitle");
         //lTitle.setPrefWidth(150);
         lTitle.setMaxHeight(30);
         lTitle.setPrefHeight(30);
 
-        Label lChannel = new Label(v.getChannelTitle());
+        Label lChannel = new Label(channel.getDescription().replaceAll("\n", " "));
         lChannel.setId("lTrendingOther");
         //lChannel.setPrefWidth(150);
 
-        Label lDate = new Label(v.getPublishedAt());
+        Label lDate = new Label(channel.getTotalItemCount()+" videos");
         lDate.setId("lTrendingOther");
         //lDate.setPrefWidth(150);
 
@@ -125,7 +121,7 @@ public class SubscriptionBuilder {
         button.setMinWidth(600);
         button.setMinHeight(90);
         button.setPrefSize(1920, 90);
-        button.setTooltip(new Tooltip(v.getVideoTitle()));
+        button.setTooltip(new Tooltip(channel.getDescription().replaceAll("\n", " ")));
         HBox.setHgrow(button, Priority.ALWAYS);
         button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         return button;

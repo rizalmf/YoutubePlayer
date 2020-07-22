@@ -37,7 +37,9 @@ import javafx.stage.Stage;
 import com.youtubeplayer.Exception.Exceptions;
 import com.youtubeplayer.YoutubePlayer;
 import com.youtubeplayer.model.Channel;
+import com.youtubeplayer.model.Mixes;
 import com.youtubeplayer.model.Video;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -247,15 +249,15 @@ public class HomeBuilder {
      * @param list
      * @return grid multiple cols & rows
      */
-    public GridPane buildVideoMix(List<Video> list){
+    public GridPane buildVideoMix(List<Mixes> list){
         GridPane grid = new GridPane();
         //grid.setPadding(new Insets(5));
         grid.setVgap(15);
         grid.setHgap(15);
         grid.setStyle("-fx-alignment: CENTER;");
         int col = 0, row = 0, max_row = 1;
-        for (Video v : list) {
-            grid.add(videoMixButton(v), col, row);
+        for (Mixes m : list) {
+            grid.add(videoMixButton(m), col, row);
             if (max_row <= row++) { col++; row = 0; }
         }
         return grid;
@@ -270,11 +272,11 @@ public class HomeBuilder {
                             false
             );
     }
-    private JFXButton videoMixButton(Video v){
+    private JFXButton videoMixButton(Mixes m){
         Image img = null;
         try {
-            if (!v.getThumbnailURL().isEmpty()) {
-                img =new Image(v.getThumbnailURL(), 175, 90, false, false, true);
+            if (!m.getThumbnailURL().isEmpty()) {
+                img =new Image(m.getThumbnailURL(), 175, 90, false, false, true);
             }else img =defaultThumbnailMix();
         } catch (Exception e) {
             img =defaultThumbnailMix();
@@ -286,8 +288,10 @@ public class HomeBuilder {
         imageView.prefHeight(90);
         imageView.setFitWidth(175);
         
-        Label lTitle = new Label(v.getVideoTitle());
+        Label lTitle = new Label(m.getVideoTitle());
         lTitle.setId("lMix");
+        lTitle.setEffect(new DropShadow(6, Color.BLACK));
+        
         HBox titleBox = new HBox(lTitle);
         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
         icon.setFill(Color.WHITE);
@@ -297,7 +301,7 @@ public class HomeBuilder {
         leftBox.setId("mixBox");
         HBox.setHgrow(leftBox, Priority.ALWAYS);
         
-        Label lCount = new Label("+"+v.getViews());
+        Label lCount = new Label("play");
         lCount.setId("lGreyBox");
         HBox greyBox = new HBox(lCount);
         greyBox.setId("greyBox");
@@ -311,7 +315,7 @@ public class HomeBuilder {
         button.setMinWidth(175);
         button.setMinHeight(90);
         button.setPrefSize(175, 90);
-        button.setTooltip(new Tooltip(v.getVideoTitle()));
+        button.setTooltip(new Tooltip(m.getVideoTitle()));
         Rectangle rect = new Rectangle(175, 90);
         rect.setArcHeight(15);
         rect.setArcWidth(15);

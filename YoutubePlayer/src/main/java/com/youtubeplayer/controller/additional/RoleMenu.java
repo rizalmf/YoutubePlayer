@@ -28,6 +28,7 @@ public class RoleMenu {
     
     //FXML PATH
     public static final String MAIN_PATH = "fxml/main.fxml";
+    public static final String SETTING_PATH = "fxml/setting.fxml";
     
     public static final String HOME_PATH = "fxml/child/home.fxml";
     public static final String TRENDING_PATH = "fxml/child/trending.fxml";

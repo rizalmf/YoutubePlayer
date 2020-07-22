@@ -17,16 +17,20 @@ package com.youtubeplayer.service.impl;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ChannelListResponse;
+import com.google.api.services.youtube.model.Playlist;
 import com.google.api.services.youtube.model.SubscriptionListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.api.services.youtube.model.PlaylistListResponse;
 import java.io.IOException;
 import java.util.List;
 import com.youtubeplayer.Exception.Exceptions;
 import com.youtubeplayer.model.Channel;
+import com.youtubeplayer.model.Mixes;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
 import com.youtubeplayer.service.Service;
 import com.youtubeplayer.service.youtube.YoutubeUtil;
+import com.youtubeplayer.util.Session;
 import com.youtubeplayer.util.formatter.Duration;
 import com.youtubeplayer.util.formatter.Viewer;
 import java.util.ArrayList;
@@ -52,11 +56,8 @@ public class ServiceYoutube implements Service{
     private static ServiceYoutube service;
     
     public static ServiceYoutube getInstance() throws Exception{
-        if(service == null){
-            System.out.println("initiating youtube service");
-            service = new ServiceYoutube();
-        }
-        return service;
+        System.out.println("initiating youtube service");
+        return new ServiceYoutube();
     }
     
     private ServiceYoutube() throws Exception{
@@ -72,7 +73,6 @@ public class ServiceYoutube implements Service{
     public Response user() {
         Channel channel= null;
         try {
-            userChannels.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
             userChannels.setMine(true);
             ChannelListResponse listResponse = userChannels.execute();
             List<com.google.api.services.youtube.model.Channel> resultList = listResponse.getItems();
@@ -103,9 +103,12 @@ public class ServiceYoutube implements Service{
     public Response recomendedVideos() {
         Response response;
         try {
+            Session session = new Session();
+            //boolean forKids = session.isYoutubeKids();
             videos.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
             videos.setChart("mostPopular");
-            videos.setRegionCode("ID");
+            videos.setMyRating(null);
+            videos.setRegionCode(session.getRegion());
             VideoListResponse listResponse = videos.execute();
             List<com.google.api.services.youtube.model.Video> resultList = listResponse.getItems();
             List<Video> list = new ArrayList<>();
@@ -113,6 +116,9 @@ public class ServiceYoutube implements Service{
                 Iterator<com.google.api.services.youtube.model.Video> iteratorSearchResults = resultList.iterator();
                 while (iteratorSearchResults.hasNext()) {
                     com.google.api.services.youtube.model.Video singleVideo = iteratorSearchResults.next();
+                    //if(forKids && !(boolean)singleVideo.getStatus().get("madeForKids")){
+                    //    continue;//cant find any.. not yet :D
+                    //}
                     Video video = new Video();
                     video.setVideoID(singleVideo.getId());
                     video.setVideoTitle(singleVideo.getSnippet().getTitle());
@@ -177,22 +183,68 @@ public class ServiceYoutube implements Service{
 
     @Override
     public Response videoMix() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Response response;
+        try {
+            Session session = new Session();
+            //boolean forKids = session.isYoutubeKids();
+            //videos.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            videos.setChart(null);
+            videos.setMyRating("like");
+            videos.setRegionCode(session.getRegion());
+            VideoListResponse videoResponse = videos.execute();
+            List<com.google.api.services.youtube.model.Video> resultList = videoResponse.getItems();
+            List<Mixes> mixList = new ArrayList<>();
+            if (resultList != null) {
+                Iterator<com.google.api.services.youtube.model.Video> iteratorSearchResults = resultList.iterator();
+                while (iteratorSearchResults.hasNext()) {
+                    com.google.api.services.youtube.model.Video singleVideo = iteratorSearchResults.next();
+                    playlists.setChannelId(singleVideo.getSnippet().getChannelId());
+                    PlaylistListResponse playListResponse = playlists.execute();
+                    List<com.google.api.services.youtube.model.Playlist> lists = playListResponse.getItems();
+                    if (lists != null) {
+                        Iterator<com.google.api.services.youtube.model.Playlist> iteratorMixResults = lists.iterator();
+                        if (iteratorMixResults.hasNext()) {
+                            com.google.api.services.youtube.model.Playlist data = iteratorMixResults.next();
+                            Mixes m = new Mixes();
+                            m.setPlaylistId(data.getId());
+                            m.setVideoTitle(data.getSnippet().getTitle());
+                            String thumbnailURL = "https://i.ytimg.com/vi/" + data.getId() + "/mqdefault.jpg";
+                            //channel.setThumbnailURL(thumbnailURL);//data.getSnippet().getThumbnails().getDefault().getUrl()
+                            m.setThumbnailURL(thumbnailURL);
+                            mixList.add(m);
+                        }
+                        if (mixList.size() >= 8) break;
+                    }
+                }
+            }
+            
+            response = new Response(true, mixList, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
     } 
 
     @Override
     public Response trending() {
         Response response;
         try {
+            Session session = new Session();
             videos.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            //boolean forKids = session.isYoutubeKids();
             videos.setChart("mostPopular");
-            videos.setRegionCode("ID");
+            videos.setMyRating(null);
+            videos.setRegionCode(session.getRegion());
             VideoListResponse listResponse = videos.execute();
             List<com.google.api.services.youtube.model.Video> resultList = listResponse.getItems();
             List<Video> list = new ArrayList<>();
             if (resultList != null) {
                 Iterator<com.google.api.services.youtube.model.Video> iteratorSearchResults = resultList.iterator();
                 while (iteratorSearchResults.hasNext()) {
+                    //if(forKids && !(boolean)singleVideo.getStatus().get("madeForKids")){
+                    //    continue;//cant find any.. not yet :D
+                    //}
                     com.google.api.services.youtube.model.Video singleVideo = iteratorSearchResults.next();
                     Video video = new Video();
                     video.setVideoID(singleVideo.getId());
@@ -228,7 +280,6 @@ public class ServiceYoutube implements Service{
     @Override
     public Response subscription() {
         Response response;
-//        GoogleSignInOptions
         try {
             channels.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
             channels.setMine(true);
@@ -245,7 +296,9 @@ public class ServiceYoutube implements Service{
                     channel.setDescription(singleChannel.getSnippet().getDescription());
                     channel.setChannelId(singleChannel.getSnippet().getChannelId());
                     channel.setTotalItemCount(singleChannel.getContentDetails().getTotalItemCount()+"");
-                    channel.setThumbnailURL(singleChannel.getSnippet().getThumbnails().getDefault().getUrl());
+                    //channel.setThumbnailURL(singleChannel.getSnippet().getThumbnails().getDefault().getUrl());
+                    String thumbnailURL = "https://i.ytimg.com/vi/" + singleChannel.getId() + "/mqdefault.jpg";
+                    channel.setThumbnailURL(thumbnailURL);
                     list.add(channel);
                 }
             }
