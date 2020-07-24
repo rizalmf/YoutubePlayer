@@ -15,6 +15,7 @@
  */
 package com.youtubeplayer.util;
 
+import static com.youtubeplayer.controller.additional.RoleMenu.VERSION;
 import java.util.prefs.Preferences;
 
 /**
@@ -87,7 +88,7 @@ public class Session {
     }
     public String getInstalledVersion(){
         p = Preferences.userRoot().node("youtubeplayer");
-        return p.get("version", "Na");
+        return p.get("version", VERSION);
     }
     //END VERSION SESSION
         

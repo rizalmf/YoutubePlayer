@@ -286,7 +286,8 @@ public class HomeBuilder {
         imageView.setPreserveRatio(false);
         imageView.prefWidth(175);
         imageView.prefHeight(90);
-        imageView.setFitWidth(175);
+        //imageView.setFitHeight(90);
+        //imageView.setFitWidth(175);
         
         Label lTitle = new Label(m.getVideoTitle());
         lTitle.setId("lMix");

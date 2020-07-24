@@ -216,7 +216,7 @@ public class MainController implements Initializable {
         
         Platform.runLater(() -> {
             //versioning
-            lVersion.setText("Youtube App ");
+            lVersion.setText("Youtube App "+session.getInstalledVersion());
 
             //user information
             userBox.getChildren().clear();
@@ -227,7 +227,7 @@ public class MainController implements Initializable {
             userBox.getChildren().add(bUser);
             
             //make sure login prompt not show up
-            new Session().setRefreshLogin(false);
+            session.setRefreshLogin(false);
         });
     }
     

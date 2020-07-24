@@ -208,9 +208,7 @@ public class ServiceYoutube implements Service{
                             Mixes m = new Mixes();
                             m.setPlaylistId(data.getId());
                             m.setVideoTitle(data.getSnippet().getTitle());
-                            String thumbnailURL = "https://i.ytimg.com/vi/" + data.getId() + "/mqdefault.jpg";
-                            //channel.setThumbnailURL(thumbnailURL);//data.getSnippet().getThumbnails().getDefault().getUrl()
-                            m.setThumbnailURL(thumbnailURL);
+                            m.setThumbnailURL(data.getSnippet().getThumbnails().getDefault().getUrl());
                             mixList.add(m);
                         }
                         if (mixList.size() >= 8) break;
@@ -296,9 +294,7 @@ public class ServiceYoutube implements Service{
                     channel.setDescription(singleChannel.getSnippet().getDescription());
                     channel.setChannelId(singleChannel.getSnippet().getChannelId());
                     channel.setTotalItemCount(singleChannel.getContentDetails().getTotalItemCount()+"");
-                    //channel.setThumbnailURL(singleChannel.getSnippet().getThumbnails().getDefault().getUrl());
-                    String thumbnailURL = "https://i.ytimg.com/vi/" + singleChannel.getId() + "/mqdefault.jpg";
-                    channel.setThumbnailURL(thumbnailURL);
+                    channel.setThumbnailURL(singleChannel.getSnippet().getThumbnails().getDefault().getUrl());
                     list.add(channel);
                 }
             }

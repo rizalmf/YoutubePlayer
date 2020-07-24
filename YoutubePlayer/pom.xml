@@ -5,6 +5,43 @@
     <artifactId>YoutubePlayer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.youtubeplayer.YoutubePlayer</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -48,5 +85,41 @@
             <artifactId>samples</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/chrriis/dj-nativeswing -->
+        <dependency>
+            <groupId>chrriis</groupId>
+            <artifactId>dj-nativeswing</artifactId>
+            <version>1.0.2.20120308</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.swt</groupId>
+            <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+            <version>4.4</version>
+        </dependency>
+        
+<!-- change this based on platform    
+    org.eclipse.swt.win32.win32.x86
+    org.eclipse.swt.win32.win32.x86_64
+    org.eclipse.swt.gtk.linux.x86
+    org.eclipse.swt.gtk.linux.x86_64
+    org.eclipse.swt.cocoa.macosx
+    org.eclipse.swt.cocoa.macosx.x86_64-->
+
     </dependencies>
+    <repositories>
+        <repository>
+            <id>main-repo</id>
+            <name>mvn</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>dj-repo</id>
+            <name>dj</name>
+            <url>http://repository.jspresso.org/maven2</url>
+        </repository>
+        <repository>
+            <id>swt-repo</id>
+            <url>https://raw.githubusercontent.com/maven-eclipse/swt-repo/master/</url>
+        </repository>
+    </repositories>
 </project>

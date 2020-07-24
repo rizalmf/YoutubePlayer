@@ -20,6 +20,9 @@ package com.youtubeplayer.controller.additional;
  * @author rizal
  */
 public class RoleMenu {    
+    //VERSION
+    public static final String VERSION = "0.0.1";
+    
     //PROJECT URL
     public static final String PROJECT_URL = "https://github.com/rizalmf/YoutubePlayer";
     
