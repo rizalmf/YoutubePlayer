@@ -127,7 +127,7 @@ public class TrendingBuilder {
         button.setMinWidth(600);
         button.setMinHeight(90);
         button.setPrefSize(1920, 90);
-        button.setOnAction((e) -> {//https://www.youtube.com/watch?v=FmZRu4VkV44
+        button.setOnAction((e) -> {
             playerContainer.prepare(
                     v.getVideoTitle(), 
                     v.getVideoURL()

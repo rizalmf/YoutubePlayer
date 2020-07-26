@@ -67,8 +67,8 @@ public class PlayerContainer extends javax.swing.JFrame {
 
         setTitle("Player");
         setAlwaysOnTop(true);
-        setMinimumSize(new java.awt.Dimension(400, 280));
-        setPreferredSize(new java.awt.Dimension(400, 280));
+        setMinimumSize(new java.awt.Dimension(400, 270));
+        setPreferredSize(new java.awt.Dimension(400, 270));
         getContentPane().add(videoPlayer, java.awt.BorderLayout.CENTER);
 
         pack();

@@ -85,7 +85,7 @@ public class Duration {
                 publish = days + " days ago";
             }
             else if (seconds < 31104000){
-                publish = months <= 1 ? "one month ago" : days + " months ago";
+                publish = months <= 1 ? "one month ago" : months + " months ago";
             }
             else{
                 publish = years <= 1 ? "one year ago" : years + " years ago";
