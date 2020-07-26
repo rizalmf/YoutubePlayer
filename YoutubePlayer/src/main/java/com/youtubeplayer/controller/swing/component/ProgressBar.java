@@ -1,4 +1,4 @@
-package com.youtubeplayer.controller.swing.player;
+package com.youtubeplayer.controller.swing.component;
 
 import com.youtubeplayer.controller.swing.*;
 import java.awt.Color;

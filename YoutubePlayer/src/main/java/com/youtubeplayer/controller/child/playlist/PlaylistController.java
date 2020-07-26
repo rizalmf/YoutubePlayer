@@ -98,11 +98,11 @@ public class PlaylistController implements Initializable {
                 Response response = service.playlist(playlistId);
                 if(response.isStatus()){
                     videoList = (List<Video>) response.getData();
-                    buildLive();
+                    buildPlaylist();
                 }
             }).start();
     }
-    private void buildLive(){
+    private void buildPlaylist(){
         Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
             Platform.runLater(() -> {
                 spPlaylists.setContent(builder.buildPlaylist(videoList));

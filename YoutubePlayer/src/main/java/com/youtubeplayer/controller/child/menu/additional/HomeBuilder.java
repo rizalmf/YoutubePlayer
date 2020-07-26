@@ -167,12 +167,7 @@ public class HomeBuilder {
         rect.setArcWidth(15);
         button.setClip(rect);
         button.setOnAction((e) -> {
-            playerContainer.prepare(
-                    v.getVideoTitle(), 
-                    //"https://www.youtube.com/watch?v=FmZRu4VkV44"
-                    v.getVideoURL()
-                    //"/home/rizal/Downloads/6. Raspberry/Signage/AppSignage/Video/REFORMASI BIROKRASI.mp4"
-            );
+            playerContainer.prepare(v);
             playerContainer.setVisible(true);
             playerContainer.play();
         });

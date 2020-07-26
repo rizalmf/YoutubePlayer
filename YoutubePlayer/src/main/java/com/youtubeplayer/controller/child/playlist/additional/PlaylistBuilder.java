@@ -122,10 +122,7 @@ public class PlaylistBuilder {
         button.setMinHeight(90);
         button.setPrefSize(1920, 90);
         button.setOnAction((e) -> {
-            playerContainer.prepare(
-                    v.getVideoTitle(), 
-                    v.getVideoURL()
-            );
+            playerContainer.prepare(v);
             playerContainer.setVisible(true);
             playerContainer.play();
         });

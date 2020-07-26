@@ -184,7 +184,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.youtubeplayer.controller.swing.player.ProgressBar" name="pbVolum">
+            <Component class="com.youtubeplayer.controller.swing.component.ProgressBar" name="pbVolum">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="47" green="47" red="47" type="rgb"/>
@@ -223,7 +223,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmdFullScreenActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.youtubeplayer.controller.swing.player.ProgressBar" name="progressBar">
+        <Component class="com.youtubeplayer.controller.swing.component.ProgressBar" name="progressBar">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="47" green="47" red="47" type="rgb"/>

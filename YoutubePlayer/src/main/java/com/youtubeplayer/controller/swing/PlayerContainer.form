@@ -30,7 +30,7 @@
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
-    <Component class="com.youtubeplayer.controller.swing.player.VideoPlayer" name="videoPlayer">
+    <Component class="com.youtubeplayer.controller.swing.component.VideoPlayer" name="videoPlayer">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
           <BorderConstraints direction="Center"/>

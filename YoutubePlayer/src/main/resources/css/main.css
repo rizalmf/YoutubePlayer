@@ -66,6 +66,16 @@
     -fx-background-color: #100d19;
     -fx-background-radius: 0px;
 }
+#bottombar{
+    -fx-background-color: #100d19;
+    -fx-background-radius: 8px;
+}
+#bottombar:pressed{
+    -fx-opacity:0.9;
+}
+#bFootBar{
+    -fx-padding:0px;
+}
 #paneMain{
     -fx-background-color: #100d19c1;
     -fx-background-radius: 0px;

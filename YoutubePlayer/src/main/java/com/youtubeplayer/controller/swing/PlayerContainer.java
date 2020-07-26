@@ -15,15 +15,18 @@
  */
 package com.youtubeplayer.controller.swing;
 
+import com.youtubeplayer.model.Video;
 import com.youtubeplayer.util.vlc.VlcUtil;
 import javax.swing.ImageIcon;
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 /**
  *
  * @author rizal
  */
 public class PlayerContainer extends javax.swing.JFrame {
-
+    private VlcUtil vlcUtil;
+    private Video video;
     /**
      * Creates new form Container
      */
@@ -35,7 +38,7 @@ public class PlayerContainer extends javax.swing.JFrame {
     }
     
     private void initVideoPlayer(){
-        VlcUtil vlcUtil = new VlcUtil();
+        vlcUtil = new VlcUtil();
         videoPlayer.setMediaPlayer(vlcUtil.getMediaPlayer());
         videoPlayer.init(this);
         vlcUtil.registerCanvas(videoPlayer.getCanvas());
@@ -49,11 +52,19 @@ public class PlayerContainer extends javax.swing.JFrame {
         videoPlayer.pause();
     }
     
-    public void prepare(String title, String url){
-        setTitle(title);
-        videoPlayer.prepare(url);
+    public void prepare(Video video){
+        this.video = video;
+        setTitle(video.getVideoTitle());
+        videoPlayer.prepare(video.getVideoURL());
     }
     
+    public EmbeddedMediaPlayer getMediaPlayer(){
+        return vlcUtil.getMediaPlayer();
+    }
+    
+    public Video getVideo(){
+        return video;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,7 +74,7 @@ public class PlayerContainer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        videoPlayer = new com.youtubeplayer.controller.swing.player.VideoPlayer();
+        videoPlayer = new com.youtubeplayer.controller.swing.component.VideoPlayer();
 
         setTitle("Player");
         setAlwaysOnTop(true);
@@ -112,6 +123,6 @@ public class PlayerContainer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.youtubeplayer.controller.swing.player.VideoPlayer videoPlayer;
+    private com.youtubeplayer.controller.swing.component.VideoPlayer videoPlayer;
     // End of variables declaration//GEN-END:variables
 }

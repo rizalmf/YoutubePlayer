@@ -43,23 +43,34 @@ import static com.youtubeplayer.controller.additional.RoleMenu.TRENDING_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.UPLOAD_PATH;
 import com.youtubeplayer.controller.swing.PlayerContainer;
 import com.youtubeplayer.model.Channel;
+import com.youtubeplayer.model.PlayState;
+import com.youtubeplayer.model.Video;
 import com.youtubeplayer.service.Service;
 import com.youtubeplayer.service.impl.ServiceTemp;
 import com.youtubeplayer.service.impl.ServiceYoutube;
 import com.youtubeplayer.util.Session;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.util.Map;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 /**
  * FXML Controller class
@@ -128,6 +139,18 @@ public class MainController implements Initializable {
     private VBox listBox;
     @FXML
     private FontAwesomeIconView viewSearch;
+    @FXML
+    private Pane footerBar;
+    @FXML
+    private ImageView footerImgView;
+    @FXML
+    private Label lFooter;
+    @FXML
+    private FontAwesomeIconView footerView;
+    @FXML
+    private JFXButton bFooter;
+    @FXML
+    private JFXButton bFooterClose;
     
     /**
      * Initializes the controller class.
@@ -185,6 +208,70 @@ public class MainController implements Initializable {
      */
     private void initPlayerFrame(){
         playerContainer = new PlayerContainer();
+        playerContainer.getMediaPlayer().events().addMediaPlayerEventListener(new MediaPlayerEventAdapter(){
+            @Override
+            public void playing(MediaPlayer mediaPlayer) {
+                footer(PlayState.PLAY);
+                super.playing(mediaPlayer); 
+            }
+
+            @Override
+            public void paused(MediaPlayer mediaPlayer) {
+                footer(PlayState.PAUSE);
+                super.paused(mediaPlayer); 
+            }
+
+            @Override
+            public void stopped(MediaPlayer mediaPlayer) {
+                footer(PlayState.STOP);
+                super.stopped(mediaPlayer);
+            }
+        });
+        bFooterClose.setOnAction((e) -> {
+            footerBar.setVisible(false);
+            playerContainer.setVisible(false);
+            playerContainer.getMediaPlayer().controls().stop();
+        });
+    }
+    private void footer(PlayState state){
+        Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (ev) -> {
+            switch(state){
+                case PLAY: 
+                        if (!footerBar.isVisible()){
+                            footerBar.setOpacity(1);
+                            footerBar.setVisible(true);
+                        }
+                        bFooter.setOnAction((e) -> {
+                            playerContainer.getMediaPlayer().controls().pause();
+                        });
+                        lFooter.setText(playerContainer.getVideo().getVideoTitle());
+                        Image img =new Image(
+                                playerContainer.getVideo().getThumbnailURL(), 
+                                40, 
+                                40, 
+                                false, 
+                                false, 
+                                true);
+                        footerImgView.setImage(img);
+                        footerImgView.setClip(new Circle(20, 20, 20));
+                        footerView.setIcon(FontAwesomeIcon.PAUSE);
+                        break;
+                case PAUSE: 
+                        bFooter.setOnAction((e) -> {
+                            playerContainer.getMediaPlayer().controls().play();
+                        });
+                        footerView.setIcon(FontAwesomeIcon.PLAY);
+
+                        break;
+                case STOP: 
+                        bFooter.setOnAction((e) -> {
+                            playerContainer.getMediaPlayer().controls().play();
+                        });
+                        footerView.setIcon(FontAwesomeIcon.PLAY);
+                        break;
+            }
+        }));
+        tl.play();
     }
     
     /**
@@ -193,6 +280,7 @@ public class MainController implements Initializable {
     private void nodeInitiation(){
         parent.setBackground(Background.EMPTY);
         windowBoxChild.setVisible(false);
+        footerBar.setVisible(false);
         builder = new NodeBuilder();
         graphicOnly = false;
         searching = false;
@@ -254,6 +342,11 @@ public class MainController implements Initializable {
                     viewSearch.setFill(Paint.valueOf("#ffffff"));
                     searching = true;
                 }
+            }
+        });
+        footerBar.setOnMousePressed((e) -> {
+            if (!playerContainer.isVisible()) {
+                playerContainer.setVisible(true);
             }
         });
         Platform.runLater(() -> {

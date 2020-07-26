@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -250,22 +251,26 @@
                         <Insets bottom="10.0" left="35.0" right="20.0" top="28.0" />
                      </padding>
                   </HBox>
-                  <HBox fx:id="contentBox" VBox.vgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="35.0" right="20.0" top="18.0" />
-                     </padding>
+                  <VBox VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox fx:id="loadingBox" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                        <HBox fx:id="contentBox" VBox.vgrow="ALWAYS">
+                           <padding>
+                              <Insets bottom="10.0" left="35.0" right="20.0" top="18.0" />
+                           </padding>
                            <children>
-                              <HBox>
+                              <VBox fx:id="loadingBox" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <JFXProgressBar prefWidth="1920.0" HBox.hgrow="ALWAYS" />
+                                    <HBox>
+                                       <children>
+                                          <JFXProgressBar prefWidth="1920.0" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                              </VBox>
                            </children>
-                        </VBox>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
             </VBox>
          </children>
@@ -299,5 +304,28 @@
             <Insets right="2.0" />
          </padding>
       </HBox>
+      <Pane id="bottombar" fx:id="footerBar" opacity="0.0" prefHeight="47.0" prefWidth="266.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <ImageView fx:id="footerImgView" fitHeight="40.0" fitWidth="40.0" layoutX="220.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="lFooter" alignment="TOP_RIGHT" layoutX="20.0" layoutY="8.0" prefHeight="33.0" prefWidth="180.0" textAlignment="RIGHT" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="10.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="bFooterClose" contentDisplay="GRAPHIC_ONLY" layoutX="-4.0" layoutY="-4.0" ripplerFill="WHITE" text=" ">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="9" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="bFooter" contentDisplay="GRAPHIC_ONLY" layoutX="1.0" layoutY="21.0" ripplerFill="WHITE" text=" ">
+               <graphic>
+                  <FontAwesomeIconView fx:id="footerView" fill="WHITE" glyphName="PLAY" size="11" />
+               </graphic>
+            </JFXButton>
+         </children>
+         <effect>
+            <DropShadow height="5.82" radius="2.41" width="5.82" />
+         </effect>
+      </Pane>
    </children>
 </AnchorPane>

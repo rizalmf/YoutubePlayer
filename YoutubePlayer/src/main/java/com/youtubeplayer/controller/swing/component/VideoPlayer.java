@@ -1,5 +1,6 @@
-package com.youtubeplayer.controller.swing.player;
+package com.youtubeplayer.controller.swing.component;
 
+import com.youtubeplayer.controller.swing.event.Event;
 import com.youtubeplayer.controller.swing.*;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -173,10 +174,10 @@ public class VideoPlayer extends javax.swing.JPanel {
         cmdPlay = new javax.swing.JButton();
         cmdVolum = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        pbVolum = new com.youtubeplayer.controller.swing.player.ProgressBar();
+        pbVolum = new com.youtubeplayer.controller.swing.component.ProgressBar();
         lbTime = new javax.swing.JLabel();
         cmdFullScreen = new javax.swing.JButton();
-        progressBar = new com.youtubeplayer.controller.swing.player.ProgressBar();
+        progressBar = new com.youtubeplayer.controller.swing.component.ProgressBar();
 
         setMinimumSize(new java.awt.Dimension(390, 204));
 
@@ -463,8 +464,8 @@ public class VideoPlayer extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbTime;
     private javax.swing.JPanel panel;
-    private com.youtubeplayer.controller.swing.player.ProgressBar pbVolum;
-    private com.youtubeplayer.controller.swing.player.ProgressBar progressBar;
+    private com.youtubeplayer.controller.swing.component.ProgressBar pbVolum;
+    private com.youtubeplayer.controller.swing.component.ProgressBar progressBar;
     // End of variables declaration//GEN-END:variables
 
     public void setFinishEvent(Event finishEvent) {

@@ -1,4 +1,4 @@
-package com.youtubeplayer.controller.swing;
+package com.youtubeplayer.controller.swing.event;
 
 public interface Event {
 
