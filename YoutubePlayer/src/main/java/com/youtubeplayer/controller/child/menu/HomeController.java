@@ -36,9 +36,6 @@ import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Mixes;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
-import java.util.Timer;
-import java.util.TimerTask;
-import javafx.scene.layout.GridPane;
 
 /**
  * FXML Controller class
@@ -131,12 +128,6 @@ public class HomeController implements Initializable {
             new Thread(() -> {
                 bottomBoxProperties();
             }).start();
-//            new Timer().schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    bottomBoxProperties();
-//                }
-//            }, 0);
         });
         new Thread(task).start();
     }
@@ -185,12 +176,6 @@ public class HomeController implements Initializable {
             new Thread(() -> {
                 initVideoMix();
             }).start();
-//            new Timer().schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    initVideoMix();
-//                }
-//            }, 0);
         });
         new Thread(task).start();
     }

@@ -17,15 +17,19 @@ package com.youtubeplayer.service.impl;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ChannelListResponse;
-import com.google.api.services.youtube.model.Playlist;
 import com.google.api.services.youtube.model.SubscriptionListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.PlaylistListResponse;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 import java.io.IOException;
 import java.util.List;
 import com.youtubeplayer.Exception.Exceptions;
 import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Mixes;
+import com.youtubeplayer.model.MyPlaylist;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
 import com.youtubeplayer.service.Service;
@@ -51,12 +55,12 @@ public class ServiceYoutube implements Service{
     private YouTube.Search.List search;
     private YouTube.Videos.List videos;
     private YouTube.Subscriptions.List channels;
-    private YouTube.LiveStreams.List liveStreams;
-    private YouTube.Playlists.List playlists;
+    private YouTube.Playlists.List mixeslist;
+    private YouTube.Playlists.List playlist;
+    private YouTube.PlaylistItems.List playlistItems;
     private static ServiceYoutube service;
     
     public static ServiceYoutube getInstance() throws Exception{
-        System.out.println("initiating youtube service");
         return new ServiceYoutube();
     }
     
@@ -96,7 +100,43 @@ public class ServiceYoutube implements Service{
         
     @Override
     public Response search(String query) {
-        return new Response(true, null, "Data found!");
+        Response response;
+        try {
+            Session session = new Session();
+            search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            search.setQ(query);
+            search.setRegionCode(session.getRegion());
+            search.setEventType("none");
+            search.setOrder("relevance");
+            SearchListResponse searchResponse = search.execute();
+            List<SearchResult> searchResultList = searchResponse.getItems();
+            List<Video> list = new ArrayList<>();
+            if (searchResultList != null) {
+                Iterator<SearchResult> iteratorSearchResults = searchResultList.iterator();
+                while (iteratorSearchResults.hasNext()) {
+                    SearchResult singleVideo = iteratorSearchResults.next();
+                    ResourceId rId = singleVideo.getId();
+                    if (rId.getKind().equals("youtube#video")) { 
+                        String id = rId.getVideoId();
+                        Video video = new Video();
+                        video.setVideoID(id);
+                        video.setVideoTitle(singleVideo.getSnippet().getTitle());
+                        video.setThumbnailURL("https://i.ytimg.com/vi/" + id + "/mqdefault.jpg");
+                        video.setDescription(singleVideo.getSnippet().getDescription());
+                        video.setChannelTitle(singleVideo.getSnippet().getChannelTitle());
+                        video.setLiveBroadcastContent(singleVideo.getSnippet().getLiveBroadcastContent());
+                        video.setPublishedAt(duration.publishFormat(singleVideo.getSnippet().getPublishedAt().getValue()));
+                        video.setVideoURL("https://www.youtube.com/watch?v=" + id);
+                        list.add(video);
+                    }
+                }
+            }
+            response = new Response(true, list, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
     }
     
     @Override
@@ -137,6 +177,7 @@ public class ServiceYoutube implements Service{
                                 singleVideo.getStatistics().getViewCount().longValue()
                             )
                     );
+                    video.setVideoURL("https://www.youtube.com/watch?v=" + singleVideo.getId());
                     String thumbnailURL = "https://i.ytimg.com/vi/" + singleVideo.getId() + "/mqdefault.jpg";
                     video.setThumbnailURL(thumbnailURL);
                     list.add(video);
@@ -198,8 +239,8 @@ public class ServiceYoutube implements Service{
                 Iterator<com.google.api.services.youtube.model.Video> iteratorSearchResults = resultList.iterator();
                 while (iteratorSearchResults.hasNext()) {
                     com.google.api.services.youtube.model.Video singleVideo = iteratorSearchResults.next();
-                    playlists.setChannelId(singleVideo.getSnippet().getChannelId());
-                    PlaylistListResponse playListResponse = playlists.execute();
+                    mixeslist.setChannelId(singleVideo.getSnippet().getChannelId());
+                    PlaylistListResponse playListResponse = mixeslist.execute();
                     List<com.google.api.services.youtube.model.Playlist> lists = playListResponse.getItems();
                     if (lists != null) {
                         Iterator<com.google.api.services.youtube.model.Playlist> iteratorMixResults = lists.iterator();
@@ -262,6 +303,7 @@ public class ServiceYoutube implements Service{
                                 singleVideo.getStatistics().getViewCount().longValue()
                             )
                     );
+                    video.setVideoURL("https://www.youtube.com/watch?v=" + singleVideo.getId());
                     String thumbnailURL = "https://i.ytimg.com/vi/" + singleVideo.getId() + "/mqdefault.jpg";
                     video.setThumbnailURL(thumbnailURL);
                     list.add(video);
@@ -308,7 +350,41 @@ public class ServiceYoutube implements Service{
     
     @Override
     public Response live() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Response response;
+        try {
+            Session session = new Session();
+            search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            search.setQ("");
+            search.setEventType("live");
+            search.setRegionCode(session.getRegion());
+            search.setOrder("viewCount");
+            SearchListResponse searchResponse = search.execute();
+            List<SearchResult> searchResultList = searchResponse.getItems();
+            List<Video> list = new ArrayList<>();
+            if (searchResultList != null) {
+                Iterator<SearchResult> iteratorSearchResults = searchResultList.iterator();
+                while (iteratorSearchResults.hasNext()) {
+                    SearchResult singleVideo = iteratorSearchResults.next();
+                    ResourceId rId = singleVideo.getId();
+                    if (rId.getKind().equals("youtube#video")) { 
+                        String id = rId.getVideoId();
+                        Video video = new Video();
+                        video.setVideoID(id);
+                        video.setVideoTitle(singleVideo.getSnippet().getTitle());
+                        video.setThumbnailURL("https://i.ytimg.com/vi/" + id + "/mqdefault.jpg");
+                        video.setDescription(singleVideo.getSnippet().getDescription());
+                        video.setChannelTitle(singleVideo.getSnippet().getChannelTitle());
+                        video.setVideoURL("https://www.youtube.com/watch?v=" + id);
+                        list.add(video);
+                    }
+                }
+            }
+            response = new Response(true, list, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
     }
 
     @Override
@@ -323,25 +399,136 @@ public class ServiceYoutube implements Service{
 
     @Override
     public Response likedVideos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Response response;
+        try {
+            Session session = new Session();
+            //boolean forKids = session.isYoutubeKids();
+            videos.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            videos.setChart(null);
+            videos.setMyRating("like");
+            videos.setRegionCode(session.getRegion());
+            VideoListResponse videoResponse = videos.execute();
+            List<com.google.api.services.youtube.model.Video> resultList = videoResponse.getItems();
+            List<Video> list = new ArrayList<>();
+            if (resultList != null) {
+                Iterator<com.google.api.services.youtube.model.Video> iteratorSearchResults = resultList.iterator();
+                while (iteratorSearchResults.hasNext()) {
+                    //if(forKids && !(boolean)singleVideo.getStatus().get("madeForKids")){
+                    //    continue;//cant find any.. not yet :D
+                    //}
+                    com.google.api.services.youtube.model.Video singleVideo = iteratorSearchResults.next();
+                    Video video = new Video();
+                    video.setVideoID(singleVideo.getId());
+                    video.setVideoTitle(singleVideo.getSnippet().getTitle());
+                    video.setChannelTitle(singleVideo.getSnippet().getChannelTitle());
+                    video.setPublishedAt(
+                            duration.publishFormat(
+                                singleVideo.getSnippet().getPublishedAt().getValue()
+                            )
+                    );
+                    video.setDuration(
+                            duration.format(
+                                singleVideo.getContentDetails().getDuration())
+                    );
+                    video.setViews(
+                            viewer.format(
+                                singleVideo.getStatistics().getViewCount().longValue()
+                            )
+                    );
+                    video.setVideoURL("https://www.youtube.com/watch?v=" + singleVideo.getId());
+                    String thumbnailURL = "https://i.ytimg.com/vi/" + singleVideo.getId() + "/mqdefault.jpg";
+                    video.setThumbnailURL(thumbnailURL);
+                    list.add(video);
+                }
+            }
+            
+            response = new Response(true, list, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
+    }
+    
+    @Override
+    public Response myList() {
+        Response response;
+        try {
+            List<MyPlaylist> myPlaylists = new ArrayList<>();
+            playlist.setMine(true);
+            PlaylistListResponse playListResponse = playlist.execute();
+            List<com.google.api.services.youtube.model.Playlist> lists = playListResponse.getItems();
+            if (lists != null) {
+                Iterator<com.google.api.services.youtube.model.Playlist> iteratorMixResults = lists.iterator();
+                while (iteratorMixResults.hasNext()) {
+                    com.google.api.services.youtube.model.Playlist data = iteratorMixResults.next();
+                    MyPlaylist m = new MyPlaylist();
+                    m.setPlaylistId(data.getId());
+                    m.setPlaylistTiTle(data.getSnippet().getTitle());
+                    myPlaylists.add(m);
+                }
+            }
+            
+            response = new Response(true, myPlaylists, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
+    }
+    
+    @Override
+    public Response playlist(String playlistId) {
+        Response response;
+        try {
+            //Session session = new Session();
+            //boolean forKids = session.isYoutubeKids();
+            playlistItems.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            playlistItems.setPlaylistId(playlistId);
+            PlaylistItemListResponse listResponse = playlistItems.execute();
+            List<com.google.api.services.youtube.model.PlaylistItem> resultList = listResponse.getItems();
+            List<Video> list = new ArrayList<>();
+            if (resultList != null) {
+                Iterator<com.google.api.services.youtube.model.PlaylistItem> iteratorlistResults = resultList.iterator();
+                while (iteratorlistResults.hasNext()) {
+                    //if(forKids && !(boolean)singleVideo.getStatus().get("madeForKids")){
+                    //    continue;//cant find any.. not yet :D
+                    //}
+                    com.google.api.services.youtube.model.PlaylistItem singleVideo = iteratorlistResults.next();
+                    Video video = new Video();
+                    video.setVideoID(singleVideo.getId());
+                    video.setVideoURL("https://www.youtube.com/watch?v=" + singleVideo.getId());
+                    video.setVideoTitle(singleVideo.getSnippet().getTitle());
+                    video.setChannelTitle(singleVideo.getSnippet().getChannelTitle());
+                    video.setThumbnailURL(singleVideo.getSnippet().getThumbnails().getDefault().getUrl());
+                    list.add(video);
+                }
+            }
+            
+            response = new Response(true, list, "get data success");
+        } catch (Exception e) {
+            response = new Response(false, null, "get data failed");
+            exceptions.log(e);
+        }
+        return response;
     }
 
-    
     private void initKey(){
         search.setKey(YoutubeUtil.getKey());
         videos.setKey(YoutubeUtil.getKey());
         channels.setKey(YoutubeUtil.getKey());
-        liveStreams.setKey(YoutubeUtil.getKey());
-        playlists.setKey(YoutubeUtil.getKey());
+        mixeslist.setKey(YoutubeUtil.getKey());
+        playlist.setKey(YoutubeUtil.getKey());
+        playlistItems.setKey(YoutubeUtil.getKey());
     }
-    
     private void makeSnippet() throws IOException{
         userChannels = youtube.channels().list(YoutubeUtil.getUserChannelParam());
         search = youtube.search().list(YoutubeUtil.getSearchParam());
         videos = youtube.videos().list(YoutubeUtil.getVideosParam());
         channels = youtube.subscriptions().list(YoutubeUtil.getChannelsParam());
-        liveStreams = youtube.liveStreams().list(YoutubeUtil.getLiveStreamparam());
-        playlists = youtube.playlists().list(YoutubeUtil.getPlaylistsParam());
+        mixeslist = youtube.playlists().list(YoutubeUtil.getPlaylistsParam());
+        playlist = youtube.playlists().list(YoutubeUtil.getPlaylistsParam());
+        playlistItems = youtube.playlistItems().list(YoutubeUtil.getPlaylistItemsParam());
     }
     private void makeFields(){
         userChannels.setFields(YoutubeUtil.getUserChannelField());
@@ -349,6 +536,9 @@ public class ServiceYoutube implements Service{
         search.setFields(YoutubeUtil.getSearchField());
         videos.setFields(YoutubeUtil.getVideosField());
         channels.setFields(YoutubeUtil.getChannelsField());
+        mixeslist.setFields(YoutubeUtil.getPlaylistsField());
+        playlist.setFields(YoutubeUtil.getPlaylistsField());
+        playlistItems.setFields(YoutubeUtil.getPlaylistItemsField());
     }
 
 }

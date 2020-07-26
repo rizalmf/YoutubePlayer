@@ -16,7 +16,6 @@
 package com.youtubeplayer.controller.additional;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXNodesList;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -26,27 +25,29 @@ import javafx.scene.layout.HBox;
 import com.youtubeplayer.Exception.Exceptions;
 import com.youtubeplayer.YoutubePlayer;
 import static com.youtubeplayer.controller.MainController.service;
-import com.youtubeplayer.controller.SettingController;
+import static com.youtubeplayer.controller.additional.RoleMenu.PLAYLIST_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.PROJECT_URL;
-import static com.youtubeplayer.controller.additional.RoleMenu.SETTING_PATH;
+import static com.youtubeplayer.controller.additional.RoleMenu.SEARCH_PATH;
+import com.youtubeplayer.controller.child.SearchController;
+import com.youtubeplayer.controller.child.playlist.PlaylistController;
 import com.youtubeplayer.model.Channel;
+import com.youtubeplayer.model.MyPlaylist;
 import com.youtubeplayer.model.Response;
-import com.youtubeplayer.service.impl.ServiceYoutube;
 import com.youtubeplayer.util.Session;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javafx.scene.Scene;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -61,20 +62,70 @@ public class NodeBuilder {
      * @param row destination node
      */
     public void openContent(String load, HBox row){
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            row.getChildren().clear();
-            Parent content = fxmlLoader.load(getClass().getClassLoader().getResourceAsStream(load));
-            content.getStylesheets()
-                    .add(getClass().getClassLoader().getResource("css/main.css")
-                    .toExternalFo‌rm());
-            //row.setVisible(true);//node always true
-            row.getChildren().add(content);  
-        } catch (IOException e) {
-            exceptions.log(e);
-        }
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                row.getChildren().clear();
+                Parent content = fxmlLoader.load(getClass().getClassLoader().getResourceAsStream(load));
+                content.getStylesheets()
+                        .add(getClass().getClassLoader().getResource("css/main.css")
+                        .toExternalFo‌rm());
+                //row.setVisible(true);//node always true
+                row.getChildren().add(content);  
+            } catch (IOException e) {
+                exceptions.log(e);
+            }
+        });
     }
     
+    /**
+     * 
+     * @param search
+     * @param row 
+     */
+    public void openSearchContent(String search, HBox row){
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(SEARCH_PATH));
+                Parent content = fxmlLoader.load();
+                SearchController searchController = fxmlLoader.getController();
+                searchController.setSearchText(search);
+                content.getStylesheets()
+                        .add(getClass().getClassLoader().getResource("css/main.css")
+                        .toExternalFo‌rm());
+                row.getChildren().clear();
+                //row.setVisible(true);//node always true
+                row.getChildren().add(content);  
+            } catch (IOException e) {
+                exceptions.log(e);
+            }
+        });
+    }
+    
+    /**
+     * 
+     * @param playlistId
+     * @param row 
+     */
+    public void openPlaylistContent(String playlistId, String playlistName,HBox row){
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(PLAYLIST_PATH));
+                Parent content = fxmlLoader.load();
+                PlaylistController playlistController = fxmlLoader.getController();
+                playlistController.setPlaylistId(playlistId);
+                playlistController.setPlaylistName(playlistName);
+                content.getStylesheets()
+                        .add(getClass().getClassLoader().getResource("css/main.css")
+                        .toExternalFo‌rm());
+                row.getChildren().clear();
+                //row.setVisible(true);//node always true
+                row.getChildren().add(content);  
+            } catch (IOException e) {
+                exceptions.log(e);
+            }
+        });
+    }
     /**
      * build user button
      * @return button
@@ -128,6 +179,7 @@ public class NodeBuilder {
      * @return nodes
      */
     public VBox userSetting(Channel userChannel){
+        Session session = new Session();
         Label lName;
         Image img;
         HBox box = new HBox();
@@ -140,7 +192,6 @@ public class NodeBuilder {
             JFXButton bLogin = new JFXButton("Login");
             bLogin.setId("bUser");
             bLogin.setOnAction((e) -> {
-                Session session = new Session();
                 session.setLogin(true);
                 session.setRefreshLogin(true);
                 lName.setText("Close setting to reload!");
@@ -153,7 +204,6 @@ public class NodeBuilder {
             JFXButton bLogout = new JFXButton("Logout");
             bLogout.setId("bUser");
             bLogout.setOnAction((e) -> {
-                Session session = new Session();
                 session.setLogin(false);
                 session.setRefreshLogin(true);
                 lName.setText("Close setting to reload!");
@@ -161,7 +211,6 @@ public class NodeBuilder {
             JFXButton bRefresh = new JFXButton("Refresh");
             bRefresh.setId("bUser");
             bRefresh.setOnAction((e) -> {
-                Session session = new Session();
                 session.setLogin(true);
                 session.setRefreshLogin(true);
                 lName.setText("Close setting to reload!");
@@ -192,6 +241,47 @@ public class NodeBuilder {
                 exceptions.log(e);
             }
         }).start();
+    }
+    
+    /**
+     * create user playlist
+     * @param listBox
+     * @param row 
+     */
+    public void initPlaylist(VBox listBox, HBox row){
+        
+        Response response = service.myList();
+        if (response.isStatus()) {
+             List<MyPlaylist> list = (List<MyPlaylist>) response.getData();
+             buildPlayList(list, listBox, row);
+        }
+    }
+    private void buildPlayList(List<MyPlaylist> list, VBox listBox, HBox row){
+        listBox.getChildren().clear();
+        for (MyPlaylist m : list) {
+            listBox.getChildren().add(myPlaylistButton(m, row));
+        }
+    }
+    private JFXButton myPlaylistButton(MyPlaylist m, HBox row){
+        FontAwesomeIconView view = new FontAwesomeIconView(FontAwesomeIcon.BARS);
+        view.setFill(Paint.valueOf("#ffffff"));
+        view.setWrappingWidth(25);
+        
+        Label listName = new Label(m.getPlaylistTiTle());
+        listName.setId("lSidebar");
+        
+        HBox box = new HBox(view, listName);
+        box.setId("hbBody");
+        box.setPadding(new Insets(0));
+        
+        JFXButton button = new JFXButton("", box);
+        button.setPrefHeight(25);
+        button.setId("bMenu");
+        button.setOnAction((e) -> {
+            openPlaylistContent(m.getPlaylistId(), m.getPlaylistTiTle(), row);
+        });
+        button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        return button;
     }
     
     /**

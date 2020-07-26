@@ -78,7 +78,7 @@
         <dependency>
             <groupId>uk.co.caprica</groupId>
             <artifactId>vlcj</artifactId>
-            <version>4.1.0</version>
+            <version>4.4.4</version>
         </dependency>
         <dependency>
             <groupId>com.google.api.services.samples.youtube.cmdline</groupId>
@@ -86,7 +86,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/chrriis/dj-nativeswing -->
-        <dependency>
+<!--        <dependency>
             <groupId>chrriis</groupId>
             <artifactId>dj-nativeswing</artifactId>
             <version>1.0.2.20120308</version>
@@ -95,7 +95,7 @@
             <groupId>org.eclipse.swt</groupId>
             <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
             <version>4.4</version>
-        </dependency>
+        </dependency>-->
         
 <!-- change this based on platform    
     org.eclipse.swt.win32.win32.x86
@@ -112,7 +112,7 @@
             <name>mvn</name>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
-        <repository>
+<!--        <repository>
             <id>dj-repo</id>
             <name>dj</name>
             <url>http://repository.jspresso.org/maven2</url>
@@ -120,6 +120,6 @@
         <repository>
             <id>swt-repo</id>
             <url>https://raw.githubusercontent.com/maven-eclipse/swt-repo/master/</url>
-        </repository>
+        </repository>-->
     </repositories>
 </project>

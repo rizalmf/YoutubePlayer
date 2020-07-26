@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author rizal
  */
 public class CredentialUtil {
-     public static Credential getCredential(final NetHttpTransport httpTransport) throws IOException { 
+    public static Credential getCredential(final NetHttpTransport httpTransport) throws IOException { 
         Credential credential;
         Session session = new Session();
         if(session.isRefreshLogin()){

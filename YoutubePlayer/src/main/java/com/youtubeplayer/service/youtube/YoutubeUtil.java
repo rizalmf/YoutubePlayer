@@ -39,7 +39,7 @@ public class YoutubeUtil {
     private static final String videosParam = "id,snippet,contentDetails,statistics";//takeout status
     private static final String channelsParam = "id,snippet,contentDetails";
     private static final String playlistsParam = "id,snippet";
-    private static final String liveStreamParam = "";
+    private static final String playlistItemsParam = "id,snippet";
     
     public static String getUserChannelParam(){
         return userChannelParam;
@@ -57,8 +57,8 @@ public class YoutubeUtil {
         return channelsParam;
     }
     
-    public static String getLiveStreamparam(){
-        return liveStreamParam;
+    public static String getPlaylistItemsParam(){
+        return playlistItemsParam;
     }
     
     public static String getPlaylistsParam(){
@@ -79,6 +79,8 @@ public class YoutubeUtil {
                 + "id/videoId,"
                 + "snippet/title,"
                 + "snippet/channelTitle,"
+                + "snippet/description,"
+                + "snippet/liveBroadcastContent,"
                 + "snippet/publishedAt"
             + ")";
     private static final String videosField = 
@@ -111,7 +113,15 @@ public class YoutubeUtil {
                 + "snippet/channelId,"
                 + "snippet/thumbnails,"
             + ")";
-    private static final String liveStreamField = "";
+    private static final String playlistItemsField = 
+            "items("
+                + "id,"
+                + "kind,"
+                + "snippet/title,"
+                + "snippet/channelId,"
+                + "snippet/channelTitle,"
+                + "snippet/publishedAt,"
+            + ")";
     
     public static String getUserChannelField(){
         return userChannelField;
@@ -127,5 +137,13 @@ public class YoutubeUtil {
     
     public static String getChannelsField(){
         return channelsField;
+    }
+    
+    public static String getPlaylistsField(){
+        return playlistsField;
+    }
+    
+    public static String getPlaylistItemsField(){
+        return playlistsField;
     }
 }

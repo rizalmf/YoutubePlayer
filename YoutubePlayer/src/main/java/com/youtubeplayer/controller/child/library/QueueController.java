@@ -29,12 +29,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import static com.youtubeplayer.controller.MainController.service;
-import com.youtubeplayer.controller.child.library.additional.HistoryBuilder;
 import com.youtubeplayer.controller.child.library.additional.QueueBuilder;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
+import javafx.scene.control.Label;
 
 /**
+ * Deprecated API from google
  * FXML Controller class
  *
  * @author rizal
@@ -79,8 +80,9 @@ public class QueueController implements Initializable {
      *      choose video
      */
     private void queueProperties(){
-       //init contentbox
-       initQueue();
+        spQueue.setContent(new Label("Deprecated API. No longer supported by Google."));
+        //init contentbox
+        //initQueue();
     }
     private void initQueue(){
         new Thread(() -> {

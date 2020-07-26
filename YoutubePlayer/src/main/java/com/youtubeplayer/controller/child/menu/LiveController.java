@@ -85,7 +85,12 @@ public class LiveController implements Initializable {
                 Response response = service.live();
                 if(response.isStatus()){
                     liveList = (List<Video>) response.getData();
-                    buildLive();
+                    Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
+                        spLive.setContent(null);
+                        buildLive();
+                    }));
+                    tl.play();
+                    
                 }
             }).start();
     }
@@ -95,7 +100,7 @@ public class LiveController implements Initializable {
                 spLive.setContent(builder.buildLive(liveList));
             });
         }));
-        tl.setDelay(Duration.millis(300));
+        tl.setDelay(Duration.millis(600));
         tl.play();
     }
     

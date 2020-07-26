@@ -33,7 +33,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import com.youtubeplayer.Exception.Exceptions;
-import com.youtubeplayer.YoutubePlayer;
+import static com.youtubeplayer.controller.MainController.playerContainer;
 import com.youtubeplayer.model.Video;
 
 /**
@@ -115,11 +115,11 @@ public class LiveBuilder {
         lChannel.setId("lTrendingOther");
         //lChannel.setPrefWidth(150);
 
-        Label lDate = new Label(v.getPublishedAt());
-        lDate.setId("lTrendingOther");
+        Label lDesc = new Label(v.getDescription());
+        lDesc.setId("lTrendingOther");
         //lDate.setPrefWidth(150);
 
-        VBox boxTxt = new VBox(lTitle, lChannel, lDate);
+        VBox boxTxt = new VBox(lTitle, lChannel, lDesc);
         boxTxt.setId("boxTxt");
         boxTxt.setSpacing(1);
 
@@ -131,6 +131,14 @@ public class LiveBuilder {
         button.setMinWidth(600);
         button.setMinHeight(90);
         button.setPrefSize(1920, 90);
+        button.setOnAction((e) -> {//https://www.youtube.com/watch?v=FmZRu4VkV44
+            playerContainer.prepare(
+                    v.getVideoTitle(), 
+                    v.getVideoURL()
+            );
+            playerContainer.setVisible(true);
+            playerContainer.play();
+        });
         button.setTooltip(new Tooltip(v.getVideoTitle()));
         HBox.setHgrow(button, Priority.ALWAYS);
         button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);

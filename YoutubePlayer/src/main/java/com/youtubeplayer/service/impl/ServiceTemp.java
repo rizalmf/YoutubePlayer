@@ -129,4 +129,14 @@ public class ServiceTemp implements Service{
         return new Response(true, createVideoList(52), "Data found!");
     }
 
+    @Override
+    public Response myList() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Response playlist(String playlistId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

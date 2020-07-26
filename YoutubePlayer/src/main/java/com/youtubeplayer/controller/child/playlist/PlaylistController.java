@@ -15,12 +15,24 @@
  */
 package com.youtubeplayer.controller.child.playlist;
 
+import static com.youtubeplayer.controller.MainController.service;
+import com.youtubeplayer.controller.child.playlist.additional.PlaylistBuilder;
+import com.youtubeplayer.model.Response;
+import com.youtubeplayer.model.Video;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -35,6 +47,19 @@ public class PlaylistController implements Initializable {
     private VBox boxChild;
     @FXML
     private ScrollPane spPlaylists;
+    @FXML
+    private Label lPlaylistInfo;
+    
+    private PlaylistBuilder builder;
+    private List<Video> videoList;
+    private String playlistId;
+    public void setPlaylistId(String playlistId){
+        this.playlistId =playlistId;
+    }
+    private String playlistName;
+    public void setPlaylistName(String playlistName){
+        this.playlistName =playlistName;
+    }
 
     /**
      * Initializes the controller class.
@@ -42,6 +67,49 @@ public class PlaylistController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Platform.runLater(() -> {
+            //initiation
+            nodeInitiation();   
+            //properties
+            playlistProperties();
+        });
     }    
+    
+    /**
+     * Initiate necessary node on start stage
+     */
+    private void nodeInitiation(){
+        builder = new PlaylistBuilder((HBox) box.getParent());
+        HBox.setHgrow(box, Priority.ALWAYS);
+        lPlaylistInfo.setText("Playlist "+playlistName+"");
+    }
+    
+    /** 
+     * Describe Playlist Contents
+     *  <br>handle request: 
+     *      choose video
+     */
+    private void playlistProperties(){
+       //init contentbox
+       initPlaylist();
+    }
+    private void initPlaylist(){
+        new Thread(() -> {
+                Response response = service.playlist(playlistId);
+                if(response.isStatus()){
+                    videoList = (List<Video>) response.getData();
+                    buildLive();
+                }
+            }).start();
+    }
+    private void buildLive(){
+        Timeline tl = new Timeline(new KeyFrame(Duration.ONE, (e) -> {
+            Platform.runLater(() -> {
+                spPlaylists.setContent(builder.buildPlaylist(videoList));
+            });
+        }));
+        tl.setDelay(Duration.millis(300));
+        tl.play();
+    }
     
 }

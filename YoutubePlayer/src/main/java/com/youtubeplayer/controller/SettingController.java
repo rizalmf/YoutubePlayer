@@ -19,7 +19,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
 import com.youtubeplayer.controller.additional.NodeBuilder;
-import static com.youtubeplayer.controller.additional.RoleMenu.HOME_PATH;
 import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.util.Session;
 import com.youtubeplayer.util.formatter.RegionCode;

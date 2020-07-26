@@ -128,4 +128,27 @@ public interface Service {
      */
     Response likedVideos();
     //END LIKED CONTENT
+    
+    //START MYPLAYLIST CONTENT
+    /**
+     * get playlist videos
+     * <br>(login needs)
+     * <p> Quota : ?
+     * <br>
+     * @return Response
+     */
+    Response myList();
+    //END MYPLAYLIST CONTENT
+    
+    //START PLAYLIST CONTENT
+    /**
+     * get videos based on playlistId
+     * <br>(login needs)
+     * <p> Quota : ?
+     * <br>
+     * @param playlistId
+     * @return Response
+     */
+    Response playlist(String playlistId);
+    //END PLAYLIST CONTENT
 }

@@ -15,7 +15,7 @@
                <children>
                   <HBox HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="Playlists">
+                        <Label fx:id="lPlaylistInfo" text="Playlists">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>

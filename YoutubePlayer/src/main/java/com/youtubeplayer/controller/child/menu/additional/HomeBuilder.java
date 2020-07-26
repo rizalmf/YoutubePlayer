@@ -35,7 +35,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import com.youtubeplayer.Exception.Exceptions;
-import com.youtubeplayer.YoutubePlayer;
+import static com.youtubeplayer.controller.MainController.playerContainer;
 import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.model.Mixes;
 import com.youtubeplayer.model.Video;
@@ -166,6 +166,19 @@ public class HomeBuilder {
         rect.setArcHeight(15);
         rect.setArcWidth(15);
         button.setClip(rect);
+        button.setOnAction((e) -> {//https://www.youtube.com/watch?v=FmZRu4VkV44
+            playerContainer.prepare(
+                    v.getVideoTitle(), 
+                        //"https://www.youtube.com/watch?v=Wa6QSlKFN-g"
+                        //"https://www.youtube.com/watch?v=DewB4khYnEY"
+                        //"https://www.youtube.com/watch?v=cUy78QHeuvs"
+                    //"https://www.youtube.com/watch?v=FmZRu4VkV44"
+                    v.getVideoURL()
+                    //"/home/rizal/Downloads/6. Raspberry/Signage/AppSignage/Video/REFORMASI BIROKRASI.mp4"
+            );
+            playerContainer.setVisible(true);
+            playerContainer.play();
+        });
         button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         return button;
     }

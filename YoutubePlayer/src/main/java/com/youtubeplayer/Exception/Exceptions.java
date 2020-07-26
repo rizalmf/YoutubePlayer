@@ -35,7 +35,7 @@ public class Exceptions {
         log.log(
                 Level.SEVERE 
                 , ex.getMessage()
-                //, ex //uncomment this to read full logs
+                , ex //uncomment this to read full logs
         );
     }
     

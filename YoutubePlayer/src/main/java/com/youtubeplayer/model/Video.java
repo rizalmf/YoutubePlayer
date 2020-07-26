@@ -1,24 +1,12 @@
 
-/*
- * Copyright 2020 Java Programmer Indonesia.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.youtubeplayer.model;
 
 
 import java.io.Serializable;
-
+/**
+ * follow this github. He is java swing expert!
+ * @author https://github.com/DJ-Raven
+ */
 public class Video implements Serializable {
 
     public static final long serialVersionUID = 2020L;
@@ -32,7 +20,16 @@ public class Video implements Serializable {
     private String channelTitle;
     private String views;
     private String publishedAt;
+    private String liveBroadcastContent;
     private boolean madeForKids;
+
+    public String getLiveBroadcastContent() {
+        return liveBroadcastContent;
+    }
+
+    public void setLiveBroadcastContent(String liveBroadcastContent) {
+        this.liveBroadcastContent = liveBroadcastContent;
+    }
 
     public boolean isMadeForKids() {
         return madeForKids;

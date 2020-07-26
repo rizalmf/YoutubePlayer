@@ -40,11 +40,14 @@ import static com.youtubeplayer.controller.additional.RoleMenu.QUEUE_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.SETTING_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.SUBSCRIPTION_PATH;
 import static com.youtubeplayer.controller.additional.RoleMenu.TRENDING_PATH;
+import static com.youtubeplayer.controller.additional.RoleMenu.UPLOAD_PATH;
+import com.youtubeplayer.controller.swing.PlayerContainer;
 import com.youtubeplayer.model.Channel;
 import com.youtubeplayer.service.Service;
 import com.youtubeplayer.service.impl.ServiceTemp;
 import com.youtubeplayer.service.impl.ServiceYoutube;
 import com.youtubeplayer.util.Session;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.util.Map;
 import javafx.concurrent.Task;
@@ -52,7 +55,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
@@ -66,10 +71,12 @@ public class MainController implements Initializable {
     
     private NodeBuilder builder;
     public static Service service;
+    public static PlayerContainer playerContainer;
     private boolean graphicOnly;
     private String closeTooltip;
     private String minimizeTooltip;
     private String githubTooltip;
+    private boolean searching;
     
     @FXML
     private AnchorPane parent;
@@ -117,6 +124,10 @@ public class MainController implements Initializable {
     private HBox userBox;
     @FXML
     private VBox loadingBox;
+    @FXML
+    private VBox listBox;
+    @FXML
+    private FontAwesomeIconView viewSearch;
     
     /**
      * Initializes the controller class.
@@ -129,6 +140,7 @@ public class MainController implements Initializable {
             windowProperties();
             
             //initiation
+            initPlayerFrame();
             initiation();
             //check available update
         });
@@ -168,6 +180,13 @@ public class MainController implements Initializable {
         
     }
     
+     /**
+     * Initiate playerContainer once
+     */
+    private void initPlayerFrame(){
+        playerContainer = new PlayerContainer();
+    }
+    
     /**
      * Initiate necessary node on start stage
      */
@@ -176,6 +195,7 @@ public class MainController implements Initializable {
         windowBoxChild.setVisible(false);
         builder = new NodeBuilder();
         graphicOnly = false;
+        searching = false;
         //open content home on first initiation
         builder.openContent(HOME_PATH, contentBox);
         
@@ -208,12 +228,34 @@ public class MainController implements Initializable {
   
         menuProperties();
         libraryProperties();
-        playListProperties();  
         
         bUpload.setOnAction((e) -> {
             //login needs
+            builder.openContent(UPLOAD_PATH, contentBox);
         });
         
+        tfSearch.setOnKeyReleased((e) -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                String search = tfSearch.getText();
+                if(!search.replaceAll(" ", "").replaceAll("\\.", "").isEmpty()){
+                     builder.openSearchContent(search, contentBox);
+                     tfSearch.clear();
+                }
+            }
+        });
+        tfSearch.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.isEmpty()) {
+                if (searching) {
+                    viewSearch.setFill(Paint.valueOf("#ffffff4d"));
+                    searching = false;
+                }
+            }else{
+                if(!searching){
+                    viewSearch.setFill(Paint.valueOf("#ffffff"));
+                    searching = true;
+                }
+            }
+        });
         Platform.runLater(() -> {
             //versioning
             lVersion.setText("Youtube App "+session.getInstalledVersion());
@@ -228,6 +270,7 @@ public class MainController implements Initializable {
             
             //make sure login prompt not show up
             session.setRefreshLogin(false);
+            playListProperties();
         });
     }
     
@@ -276,7 +319,7 @@ public class MainController implements Initializable {
      *      any saved playlists
      */
     private void playListProperties(){
-        
+        builder.initPlaylist(listBox, contentBox);
     }
     
     /**
@@ -330,6 +373,8 @@ public class MainController implements Initializable {
         });
         bGithub.setOnAction((e) -> { builder.github(); });
     }
+    
+    
     /**
      * open setting stage
      * @param userChannel 
@@ -358,12 +403,14 @@ public class MainController implements Initializable {
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);  
         stage.showAndWait();
-        Session session = new Session();
-        if(session.isRefreshLogin()){
-            contentBox.getChildren().clear();
-            contentBox.getChildren().add(loadingBox);
-            initiation();
-        }
-        bLogo.setId((session.isYoutubeKids())? "logo-alt": "logo");
+        Platform.runLater(() -> {
+            Session session = new Session();
+            if(session.isRefreshLogin()){
+                contentBox.getChildren().clear();
+                contentBox.getChildren().add(loadingBox);
+                initiation();
+            }
+            bLogo.setId((session.isYoutubeKids())? "logo-alt": "logo");
+        });
     }
 }

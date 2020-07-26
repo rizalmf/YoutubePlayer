@@ -58,5 +58,40 @@
             <Button layoutX="10.0" layoutY="36.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="Button" />
          </children>
       </JFXNodesList>
+      <VBox layoutX="462.0" layoutY="256.0" prefHeight="69.0" prefWidth="126.0" spacing="5.0">
+         <children>
+            <Button id="bMenu" mnemonicParsing="false" prefHeight="24.0">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <FontAwesomeIconView fill="WHITE" glyphName="BARS" wrappingWidth="25.142857551574707" />
+                        <Label text="Favorite NCS">
+                           <font>
+                              <Font name="System Bold" size="9.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </graphic>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+            <Button id="bMenu" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="24.0">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <FontAwesomeIconView fill="WHITE" glyphName="BARS" wrappingWidth="25.142857551574707" />
+                        <Label text="Happy Asmara">
+                           <font>
+                              <Font name="System Bold" size="9.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

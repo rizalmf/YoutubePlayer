@@ -29,6 +29,7 @@ public class Environment {
     private final Exceptions exceptions = new Exceptions(this.getClass());
     private final String APPLICATION_NAME = "YoutubePlayer";
     private static Map<String, String> env;
+    
     public String APP_NAME(){
         return APPLICATION_NAME;
     }

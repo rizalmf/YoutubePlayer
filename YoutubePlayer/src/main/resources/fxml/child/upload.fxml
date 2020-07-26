@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="box" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.youtubeplayer.controller.child.UploadController">
+   <children>
+      <VBox id="boxUpload" fx:id="boxUpload" alignment="CENTER" spacing="15.0" style="-fx-background-color: #ffffff66;" VBox.vgrow="ALWAYS">
+         <children>
+            <FontAwesomeIconView fill="WHITE" glyphName="UPLOAD" size="64" />
+            <Label id="lUpload" alignment="CENTER" contentDisplay="CENTER" text="Drag&amp;Drop File Here" />
+            <Label id="lUpload" alignment="CENTER" contentDisplay="CENTER" layoutX="204.0" layoutY="223.0" text="Or" />
+            <JFXButton id="bBrowse" fx:id="bBrowse" ripplerFill="WHITE" text="Browse File">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+   </padding>
+</VBox>

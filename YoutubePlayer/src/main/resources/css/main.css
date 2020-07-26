@@ -9,6 +9,19 @@
    -fx-background-color:transparent;
    -fx-text-fill:#ffffffcc;
 }
+#tfSearch{
+    -fx-text-fill:white;
+}
+#hbBody{
+    -fx-alignment:TOP_LEFT;
+}
+#lSidebar{
+    -fx-font-size:9px;
+    -fx-font-weight:bold;
+}
+#strike .text{
+    -fx-strikethrough:true;
+}
 #topRight{
     -fx-alignment:TOP_RIGHT;
 }
@@ -194,6 +207,20 @@
 }
 #trendingButton .jfx-rippler{
     -jfx-rippler-fill:white;
+}
+
+#boxUpload{
+    -fx-background-color:#ffffff88;
+    -fx-background-radius:8px;
+}
+#lUpload{
+    -fx-text-fill:white;
+    -fx-font-size:21px;
+    -fx-font-weight:bold;
+}
+#bBrowse{
+    -fx-background-color:#ff011d;
+    -fx-background-radius:5px;
 }
 #lTrendingTitle{
     -fx-alignment:CENTER_LEFT;

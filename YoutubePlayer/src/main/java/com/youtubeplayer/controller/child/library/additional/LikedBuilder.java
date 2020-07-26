@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import com.youtubeplayer.Exception.Exceptions;
 import com.youtubeplayer.YoutubePlayer;
+import static com.youtubeplayer.controller.MainController.playerContainer;
 import com.youtubeplayer.model.Video;
 
 /**
@@ -127,6 +128,14 @@ public class LikedBuilder {
         button.setMinWidth(600);
         button.setMinHeight(90);
         button.setPrefSize(1920, 90);
+        button.setOnAction((e) -> {
+            playerContainer.prepare(
+                    v.getVideoTitle(), 
+                    v.getVideoURL()
+            );
+            playerContainer.setVisible(true);
+            playerContainer.play();
+        });
         button.setTooltip(new Tooltip(v.getVideoTitle()));
         HBox.setHgrow(button, Priority.ALWAYS);
         button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);

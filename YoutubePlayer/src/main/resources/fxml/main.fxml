@@ -129,7 +129,7 @@
                                                 <HBox alignment="CENTER_LEFT">
                                                    <children>
                                                       <FontAwesomeIconView fill="WHITE" glyphName="CLOCK_ALT" wrappingWidth="25.142857551574707" />
-                                                      <Label text="History">
+                                                      <Label id="strike" text="History">
                                                          <font>
                                                             <Font name="System Bold" size="9.0" />
                                                          </font>
@@ -146,7 +146,7 @@
                                                 <HBox alignment="CENTER_LEFT">
                                                    <children>
                                                       <FontAwesomeIconView fill="WHITE" glyphName="BARS" wrappingWidth="25.142857551574707" />
-                                                      <Label text="Queue">
+                                                      <Label id="strike" text="Queue">
                                                          <font>
                                                             <Font name="System Bold" size="9.0" />
                                                          </font>
@@ -186,40 +186,7 @@
                                           <Font name="System Bold" size="8.0" />
                                        </font>
                                     </Label>
-                                    <VBox spacing="5.0">
-                                       <children>
-                                          <Button id="bMenu" mnemonicParsing="false" prefHeight="25.0">
-                                             <graphic>
-                                                <HBox alignment="CENTER_LEFT">
-                                                   <children>
-                                                      <FontAwesomeIconView fill="WHITE" glyphName="BARS" wrappingWidth="25.142857551574707" />
-                                                      <Label text="Favorite NCS">
-                                                         <font>
-                                                            <Font name="System Bold" size="9.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                          </Button>
-                                          <Button id="bMenu" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0">
-                                             <graphic>
-                                                <HBox alignment="CENTER_LEFT">
-                                                   <children>
-                                                      <FontAwesomeIconView fill="WHITE" glyphName="BARS" wrappingWidth="25.142857551574707" />
-                                                      <Label text="Happy Asmara">
-                                                         <font>
-                                                            <Font name="System Bold" size="9.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
-                                          </Button>
-                                       </children>
+                                    <VBox fx:id="listBox" spacing="3.0">
                                        <VBox.margin>
                                           <Insets left="-8.0" top="20.0" />
                                        </VBox.margin>
@@ -230,14 +197,14 @@
                         </VBox>
                      </content>
                   </ScrollPane>
-                  <VBox spacing="8.0">
+                  <VBox alignment="BOTTOM_LEFT" spacing="8.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets right="25.0" top="8.0" />
                      </VBox.margin>
                      <children>
                         <HBox alignment="TOP_CENTER">
                            <children>
-                              <Button id="bUpload" fx:id="bUpload" mnemonicParsing="false" prefHeight="33.0" prefWidth="109.0" text="UPLOAD VIDEO">
+                              <Button id="bUpload" fx:id="bUpload" minHeight="25.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="109.0" text="UPLOAD VIDEO">
                                  <font>
                                     <Font name="System Bold" size="8.0" />
                                  </font>
@@ -257,7 +224,7 @@
                   </VBox>
                </children>
                <padding>
-                  <Insets left="25.0" top="20.0" />
+                  <Insets bottom="7.0" left="25.0" top="20.0" />
                </padding>
             </VBox>
             <VBox id="mainPane" fx:id="contentParent" HBox.hgrow="ALWAYS">
@@ -269,10 +236,10 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="582.0" spacing="6.0">
                            <children>
-                              <FontAwesomeIconView fill="#ffffff4d" glyphName="SEARCH" size="13" />
-                              <JFXTextField fx:id="tfSearch" focusColor="#ff011d" prefHeight="22.0" prefWidth="444.0" promptText="Search.." unFocusColor="#4d4d4d00" HBox.hgrow="ALWAYS">
+                              <FontAwesomeIconView fx:id="viewSearch" fill="#ffffff4d" glyphName="SEARCH" size="13" />
+                              <JFXTextField id="tfSearch" fx:id="tfSearch" focusColor="#ff011d" prefHeight="22.0" prefWidth="444.0" promptText="Search.." unFocusColor="#4d4d4d00" HBox.hgrow="ALWAYS">
                                  <font>
-                                    <Font size="11.0" />
+                                    <Font size="12.0" />
                                  </font>
                               </JFXTextField>
                            </children>

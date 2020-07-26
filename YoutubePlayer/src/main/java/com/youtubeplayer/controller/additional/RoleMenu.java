@@ -33,6 +33,8 @@ public class RoleMenu {
     public static final String MAIN_PATH = "fxml/main.fxml";
     public static final String SETTING_PATH = "fxml/setting.fxml";
     
+    public static final String SEARCH_PATH = "fxml/child/search.fxml";
+    
     public static final String HOME_PATH = "fxml/child/home.fxml";
     public static final String TRENDING_PATH = "fxml/child/trending.fxml";
     public static final String SUBSCRIPTION_PATH = "fxml/child/subscription.fxml";
@@ -43,4 +45,6 @@ public class RoleMenu {
     public static final String LIKED_PATH = "fxml/child/liked.fxml";
     
     public static final String PLAYLIST_PATH = "fxml/child/playlist.fxml";
+    
+    public static final String UPLOAD_PATH = "fxml/child/upload.fxml";
 }

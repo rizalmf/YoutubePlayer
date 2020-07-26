@@ -20,11 +20,16 @@ package com.youtubeplayer.util.formatter;
  * @author rizal
  */
 public class Duration {
-    
+    /**
+     * parse duration given String 
+     * @param duration
+     * @return HH:mm:ss
+     */
     public String format(String duration) {
         long seconds;
         try {
-            seconds = Long.parseLong(duration.replaceAll(" ", "")) * 1000;
+            seconds = java.time.Duration.parse(duration).toMillis();
+            //seconds = Long.parseLong(duration.replaceAll(" ", "")) * 1000; //serviceTemp
         } catch (Exception e) {
             seconds = java.time.Duration.parse(duration).toMillis();
         }
@@ -37,6 +42,11 @@ public class Duration {
         return hms;
     }
     
+    /**
+     * parse duration given long 
+     * @param time
+     * @return youtube style publish
+     */
     public String publishFormat(long time){
         long difference=0;
         Long mDate = java.lang.System.currentTimeMillis();     

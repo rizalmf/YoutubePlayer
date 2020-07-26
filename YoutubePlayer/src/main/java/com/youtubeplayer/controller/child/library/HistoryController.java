@@ -32,6 +32,7 @@ import static com.youtubeplayer.controller.MainController.service;
 import com.youtubeplayer.controller.child.library.additional.HistoryBuilder;
 import com.youtubeplayer.model.Response;
 import com.youtubeplayer.model.Video;
+import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
@@ -51,6 +52,7 @@ public class HistoryController implements Initializable {
     private List<Video> historyList;
 
     /**
+     * Deprecated API from google
      * Initializes the controller class.
      */
     @Override
@@ -78,8 +80,10 @@ public class HistoryController implements Initializable {
      *      choose video
      */
     private void historyProperties(){
-       //init contentbox
-       initHistory();
+        spHistory.setContent(new Label("Deprecated API. No longer supported by Google."));
+
+        //init contentbox
+        //initHistory();
     }
     private void initHistory(){
         new Thread(() -> {
