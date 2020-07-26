@@ -211,7 +211,7 @@ public class NodeBuilder {
                 session.setRefreshLogin(true);
                 lName.setText("Close setting to reload!");
             });
-            JFXButton bRefresh = new JFXButton("Refresh");
+            JFXButton bRefresh = new JFXButton("Relogin");
             bRefresh.setId("bUser");
             bRefresh.setOnAction((e) -> {
                 session.setLogin(true);

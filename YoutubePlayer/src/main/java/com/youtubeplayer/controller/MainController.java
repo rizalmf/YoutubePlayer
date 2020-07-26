@@ -227,6 +227,7 @@ public class MainController implements Initializable {
                 super.stopped(mediaPlayer);
             }
         });
+        footerBar.setVisible(false);
         bFooterClose.setOnAction((e) -> {
             footerBar.setVisible(false);
             playerContainer.setVisible(false);
@@ -280,7 +281,6 @@ public class MainController implements Initializable {
     private void nodeInitiation(){
         parent.setBackground(Background.EMPTY);
         windowBoxChild.setVisible(false);
-        footerBar.setVisible(false);
         builder = new NodeBuilder();
         graphicOnly = false;
         searching = false;
