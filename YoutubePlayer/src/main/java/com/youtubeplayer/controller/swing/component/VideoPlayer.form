@@ -195,6 +195,9 @@
                 <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="value" type="int" value="50"/>
               </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="pbVolumStateChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -232,6 +235,12 @@
               <Color blue="24" green="24" red="c6" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="progressBarMouseMoved"/>
+            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="progressBarMouseDragged"/>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="progressBarMouseReleased"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="progressBarMouseExited"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

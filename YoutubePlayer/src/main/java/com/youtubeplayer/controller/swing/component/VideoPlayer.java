@@ -1,16 +1,12 @@
 package com.youtubeplayer.controller.swing.component;
 
-import com.youtubeplayer.controller.swing.event.Event;
-import com.youtubeplayer.controller.swing.*;
-import java.awt.Canvas;
+import com.youtubeplayer.model.PlayState;
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.Panel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.base.Equalizer;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
@@ -24,9 +20,7 @@ public class VideoPlayer extends javax.swing.JPanel {
     private boolean mouseOver = false;
     private Snapshot snapshot;
     private boolean isFinish = true;
-    private Event finishEvent;
     private boolean finisOK;
-    private EventTransferHandler eventDropFile;;
     
     public VideoPlayer() {
         initComponents();
@@ -41,13 +35,24 @@ public class VideoPlayer extends javax.swing.JPanel {
     }
     
     public void init(JFrame fram) {
-        //mediaPlayer.fullScreen().strategy(new Win32FullScreenStrategy(fram));
         mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
             @Override
             public void buffering(MediaPlayer mediaPlayer, float newCache) {
                 //      System.out.println("Buffering " + newCache);
             }
 
+            @Override
+            public void playing(MediaPlayer mediaPlayer) {
+                checkPlayState(PlayState.PLAY);
+                super.playing(mediaPlayer);
+            }
+
+            @Override
+            public void paused(MediaPlayer mediaPlayer) {
+                checkPlayState(PlayState.PAUSE);
+                super.paused(mediaPlayer); 
+            }
+            
             @Override
             public void finished(MediaPlayer mediaPlayer) {
                 if (finisOK) {
@@ -58,17 +63,6 @@ public class VideoPlayer extends javax.swing.JPanel {
                     cmdPlay.setIcon(new ImageIcon(getClass()
                             .getClassLoader().getResource("images/player/play.png")));
                     cmdPlay.setName("Stop");
-                    if (finishEvent != null) {
-                        new Thread(() -> {
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-                                System.err.println(e.getMessage());
-                            }
-                            finishEvent.finish();
-                        }).start();
-                    }
                 }
             }
 
@@ -98,15 +92,7 @@ public class VideoPlayer extends javax.swing.JPanel {
                 }
             }
         });
-        //mediaPlayer.videoSurface().set(factory.videoSurfaces().newVideoSurface(canvas));
         snapshot = new Snapshot(fram, false);
-//        try {
-//            MyTransferHandler obj = new MyTransferHandler(mediaPlayer, eventDropFile);
-//            border.setTransferHandler(obj);
-//        } catch (ClassNotFoundException e) {
-//            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-//            //System.err.println(e.getMessage());
-//        }
     }
 
     public void prepare(String url) {
@@ -124,21 +110,23 @@ public class VideoPlayer extends javax.swing.JPanel {
     public void pause() {
         if (!isFinish || !mediaPlayer.media().isValid()) {
             mediaPlayer.controls().pause();
-            if (cmdPlay.getName().equals("Play")) {
-                cmdPlay.setIcon(new ImageIcon(getClass()
-                        .getClassLoader().getResource("images/player/play.png")));
-                cmdPlay.setName("Stop");
-            } else {
-                cmdPlay.setIcon(new ImageIcon(getClass()
-                        .getClassLoader().getResource("images/player/pause.png")));
-                cmdPlay.setName("Play");
-            }
+            checkPlayState(PlayState.PAUSE);
         } else {
             prepare(mediaPlayer.media().info().mrl());
+            checkPlayState(PlayState.PLAY);
             play();
         }
     }
-
+    private void checkPlayState(PlayState state){
+        switch(state){
+            case PLAY: cmdPlay.setIcon(new ImageIcon(getClass()
+                        .getClassLoader().getResource("images/player/pause.png")));
+                    break;
+            default: cmdPlay.setIcon(new ImageIcon(getClass()
+                    .getClassLoader().getResource("images/player/play.png")));
+                    break;
+        }
+    }
     private void volumnIcon() {
         String status;
         int val = pbVolum.getValue();
@@ -241,6 +229,11 @@ public class VideoPlayer extends javax.swing.JPanel {
         pbVolum.setForeground(new java.awt.Color(198, 36, 36));
         pbVolum.setToolTipText("");
         pbVolum.setValue(50);
+        pbVolum.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                pbVolumStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -271,6 +264,22 @@ public class VideoPlayer extends javax.swing.JPanel {
 
         progressBar.setBackground(new java.awt.Color(71, 71, 71));
         progressBar.setForeground(new java.awt.Color(198, 36, 36));
+        progressBar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                progressBarMouseMoved(evt);
+            }
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                progressBarMouseDragged(evt);
+            }
+        });
+        progressBar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                progressBarMouseReleased(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                progressBarMouseExited(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -323,7 +332,7 @@ public class VideoPlayer extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void progressBarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_progressBarMouseReleased
-        mediaPlayer.controls().setTime(progressBar.getValue());
+         mediaPlayer.controls().setTime(progressBar.getValue());
         if (mouseDragged) {
             snapshot.setVisible(false);
         }
@@ -435,6 +444,15 @@ public class VideoPlayer extends javax.swing.JPanel {
         snapshot.setTime(convertSecondsToHMmSs(progressBar.getValue()));
     }//GEN-LAST:event_progressBarMouseDragged
 
+    public String convertSecondsToUrl(long seconds){
+        String hms;
+        if (seconds > 3600000) {
+            hms = String.format("%01dd%02dm%02ds", seconds / (3600 * 1000), seconds / (60 * 1000) % 60, seconds / 1000 % 60);
+        } else {
+            hms = String.format("%01dm%02ds", seconds / (60 * 1000) % 60, seconds / 1000 % 60);
+        }
+        return hms;
+    }
     public String convertSecondsToHMmSs(long seconds) {
         String hms;
         if (seconds > 3600000) {
@@ -468,11 +486,4 @@ public class VideoPlayer extends javax.swing.JPanel {
     private com.youtubeplayer.controller.swing.component.ProgressBar progressBar;
     // End of variables declaration//GEN-END:variables
 
-    public void setFinishEvent(Event finishEvent) {
-        this.finishEvent = finishEvent;
-    }
-
-    public void setEventDropFile(EventTransferHandler eventDropFile) {
-        this.eventDropFile = eventDropFile;
-    }
 }
