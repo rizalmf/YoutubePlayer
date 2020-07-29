@@ -69,6 +69,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javax.swing.JFrame;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
@@ -228,6 +229,14 @@ public class MainController implements Initializable {
             }
         });
         footerBar.setVisible(false);
+        footerBar.setOnMousePressed((e) -> {
+            if (!playerContainer.isVisible()) {
+                playerContainer.setVisible(true);
+            }
+            if(playerContainer.getExtendedState() == JFrame.ICONIFIED){
+                playerContainer.setExtendedState(JFrame.NORMAL);
+            }
+        });
         bFooterClose.setOnAction((e) -> {
             footerBar.setVisible(false);
             playerContainer.setVisible(false);
@@ -342,11 +351,6 @@ public class MainController implements Initializable {
                     viewSearch.setFill(Paint.valueOf("#ffffff"));
                     searching = true;
                 }
-            }
-        });
-        footerBar.setOnMousePressed((e) -> {
-            if (!playerContainer.isVisible()) {
-                playerContainer.setVisible(true);
             }
         });
         Platform.runLater(() -> {
